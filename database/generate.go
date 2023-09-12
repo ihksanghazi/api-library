@@ -19,7 +19,7 @@ func GenerateQuery(db *gorm.DB) {
 	g.ApplyBasic(domain.User{}, domain.Book{}, domain.Borrowing{})
 
 	// Generate Type Safe API with Dynamic SQL defined on Querier interface for `model.User` and `model.Company`
-	// g.ApplyInterface(func() {}, model.User{}, model.Company{})
+	g.ApplyInterface(func() {}, domain.User{}, domain.Book{}, domain.Borrowing{})
 
 	// Generate the code
 	g.Execute()

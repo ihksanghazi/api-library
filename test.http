@@ -1,1 +1,12 @@
-GET http://localhost:3000/api
+### Register User
+POST http://localhost:3000/api/register
+
+{
+  "username":"sandy",
+	"email":"sandy@gmail.com",
+	"role":"admin",
+	"password":"123",
+	"address":"",
+	"phone_number":"",
+	"image_url":""
+}
