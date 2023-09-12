@@ -1,9 +1,9 @@
 ### Register User
 POST http://localhost:3000/api/auth/register
-Content-Type: application/json
+
 {
-  "username":"azhi",
-	"email":"azhi@gmail.com",
+  "username":"bilal",
+	"email":"bilal@gmail.com",
 	"role":"",
 	"password":"123",
 	"address":"",

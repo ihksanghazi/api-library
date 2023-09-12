@@ -20,8 +20,8 @@ func main() {
 	}
 
 	// connect database
-	database.ConnectDB()
-	repositories.SetDefault(database.DB)
+	db := database.ConnectDB()
+	repositories.SetDefault(db)
 
 	// migration
 	// database.DB.AutoMigrate(domain.User{}, domain.Book{}, domain.Borrowing{})
@@ -31,7 +31,7 @@ func main() {
 
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
-	r.Mount("/api/auth", routers.LoginRouters())
+	r.Mount("/api/auth", routers.LoginRouters(db))
 
 	http.ListenAndServe(":3000", r)
 }

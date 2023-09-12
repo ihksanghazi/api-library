@@ -16,33 +16,19 @@ type AuthService interface {
 }
 
 type AuthServiceImpl struct {
-	ctx context.Context
+	ctx        context.Context
+	repository *repositories.Query
 }
 
-func NewAuthService(ctx context.Context) AuthService {
+func NewAuthService(ctx context.Context, repository *repositories.Query) AuthService {
 	return &AuthServiceImpl{
-		ctx: ctx,
+		ctx:        ctx,
+		repository: repository,
 	}
 }
 
 func (a *AuthServiceImpl) RegisterService(req web.RegisterWebRequest) (*domain.User, error) {
-	// find user by email if already return error
-	_, errRep := repositories.User.WithContext(a.ctx).Where(repositories.User.Email.Eq(req.Email)).First()
-	if errRep == nil {
-		return nil, errors.New("email is already used")
-	} else if errRep != nil && errRep != gorm.ErrRecordNotFound {
-		return nil, errRep
-	}
-
-	// hashing password
-	hashPassword, errHashPass := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
-	if errHashPass != nil {
-		return nil, errHashPass
-	}
-
-	req.Password = string(hashPassword)
-
-	// create user
+	// passing data from request to domain
 	var user domain.User
 	user.Username = req.Username
 	user.Email = req.Email
@@ -56,10 +42,31 @@ func (a *AuthServiceImpl) RegisterService(req web.RegisterWebRequest) (*domain.U
 		user.Role = req.Role
 	}
 
-	errCreate := repositories.User.WithContext(a.ctx).Create(&user)
-	if errCreate != nil {
-		return nil, errCreate
-	}
+	// Transaction
+	errTrans := a.repository.Transaction(func(tx *repositories.Query) error {
+		// find user by email if already return error
+		_, errRep := tx.User.WithContext(a.ctx).Where(repositories.User.Email.Eq(req.Email)).First()
+		if errRep == nil {
+			return errors.New("email is already used")
+		} else if errRep != nil && errRep != gorm.ErrRecordNotFound {
+			return errRep
+		}
 
-	return &user, nil
+		// hashing password
+		hashPassword, errHashPass := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
+		if errHashPass != nil {
+			return errHashPass
+		}
+
+		req.Password = string(hashPassword)
+
+		// insert user to database
+		if errCreate := tx.User.WithContext(a.ctx).Create(&user); errCreate != nil {
+			return errCreate
+		}
+
+		return nil
+	})
+
+	return &user, errTrans
 }
