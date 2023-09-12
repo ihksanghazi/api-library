@@ -7,7 +7,6 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/ihksanghazi/api-library/database"
-	"github.com/ihksanghazi/api-library/repositories"
 	"github.com/ihksanghazi/api-library/routers"
 	"github.com/joho/godotenv"
 )
@@ -21,7 +20,6 @@ func main() {
 
 	// connect database
 	db := database.ConnectDB()
-	repositories.SetDefault(db)
 
 	// migration
 	// database.DB.AutoMigrate(domain.User{}, domain.Book{}, domain.Borrowing{})
