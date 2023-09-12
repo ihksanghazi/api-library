@@ -12,6 +12,7 @@ import (
 
 type AuthController interface {
 	RegisterController(w http.ResponseWriter, r *http.Request)
+	LoginController(w http.ResponseWriter, r *http.Request)
 }
 
 type AuthControllerImpl struct {
@@ -46,4 +47,22 @@ func (a *AuthControllerImpl) RegisterController(w http.ResponseWriter, r *http.R
 	}
 
 	utils.ResponseJSON(w, http.StatusOK, "OK", user)
+}
+
+func (a *AuthControllerImpl) LoginController(w http.ResponseWriter, r *http.Request) {
+	//bind json
+	var req web.LoginWebRequest
+	if errBind := json.NewDecoder(r.Body).Decode(&req); errBind != nil {
+		utils.ResponseError(w, http.StatusBadRequest, errBind.Error())
+		return
+	}
+
+	// validation
+	if errValidation := utils.Validation(a.validator, req); len(errValidation) > 0 {
+		utils.ResponseError(w, http.StatusBadRequest, errValidation)
+		return
+	}
+
+	// utils
+	utils.ResponseJSON(w, http.StatusAccepted, "OK", req)
 }

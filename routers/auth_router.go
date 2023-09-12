@@ -21,6 +21,7 @@ func LoginRouters(db *gorm.DB) *chi.Mux {
 	authController := controllers.NewAuthController(validator, authService)
 
 	r.Post("/register", authController.RegisterController)
+	r.Post("/login", authController.LoginController)
 
 	return r
 }

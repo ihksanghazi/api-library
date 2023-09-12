@@ -9,3 +9,8 @@ type RegisterWebRequest struct {
 	PhoneNumber string `json:"phone_number"`
 	ImageUrl    string `json:"image_url"`
 }
+
+type LoginWebRequest struct {
+	Email    string `json:"email" validate:"required,email"`
+	Password string `json:"password" validate:"required"`
+}
