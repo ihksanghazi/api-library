@@ -45,7 +45,7 @@ func (a *AuthServiceImpl) RegisterService(req web.RegisterWebRequest) (*domain.U
 	// Transaction
 	errTrans := a.repository.Transaction(func(tx *repositories.Query) error {
 		// find user by email if already return error
-		_, errRep := tx.User.WithContext(a.ctx).Where(repositories.User.Email.Eq(req.Email)).First()
+		_, errRep := tx.User.WithContext(a.ctx).Where(tx.User.Email.Eq(req.Email)).First()
 		if errRep == nil {
 			return errors.New("email is already used")
 		} else if errRep != nil && errRep != gorm.ErrRecordNotFound {
