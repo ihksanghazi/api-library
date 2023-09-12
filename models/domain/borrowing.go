@@ -13,7 +13,4 @@ type Borrowing struct {
 	LoanDate   time.Time `json:"loan_date"`
 	ReturnDate time.Time `json:"return_date"`
 	Status     string    `json:"status"`
-	// Association
-	Users []User `gorm:"foreignKey:ID" json:"users"`
-	Books []Book `gorm:"foreignKey:ID" json:"books"`
 }

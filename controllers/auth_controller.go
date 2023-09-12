@@ -6,34 +6,44 @@ import (
 
 	"github.com/go-playground/validator/v10"
 	"github.com/ihksanghazi/api-library/models/web"
+	"github.com/ihksanghazi/api-library/services"
 	"github.com/ihksanghazi/api-library/utils"
 )
 
 type AuthController interface {
-	Register(w http.ResponseWriter, r *http.Request)
+	RegisterController(w http.ResponseWriter, r *http.Request)
 }
 
 type AuthControllerImpl struct {
 	validator *validator.Validate
+	service   services.AuthService
 }
 
-func NewAuthController(validator *validator.Validate) AuthController {
+func NewAuthController(validator *validator.Validate, service services.AuthService) AuthController {
 	return &AuthControllerImpl{
 		validator: validator,
+		service:   service,
 	}
 }
 
-func (a *AuthControllerImpl) Register(w http.ResponseWriter, r *http.Request) {
+func (a *AuthControllerImpl) RegisterController(w http.ResponseWriter, r *http.Request) {
 	var req web.RegisterWebRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-		http.Error(w, "Bad Request", http.StatusBadRequest)
+		utils.ResponseError(w, http.StatusBadRequest, err.Error())
 		return
 	}
 
+	// cek validation
 	if errVal := utils.Validation(a.validator, req); len(errVal) > 0 {
 		utils.ResponseError(w, http.StatusBadRequest, errVal)
 		return
 	}
 
-	json.NewEncoder(w).Encode(&req)
+	user, errSer := a.service.RegisterService(req)
+	if errSer != nil {
+		utils.ResponseError(w, http.StatusInternalServerError, errSer.Error())
+		return
+	}
+
+	utils.ResponseJSON(w, http.StatusOK, "OK", user)
 }

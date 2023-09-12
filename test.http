@@ -2,9 +2,9 @@
 POST http://localhost:3000/api/register
 
 {
-  "username":"sandy",
-	"email":"sandy@gmail.com",
-	"role":"admin",
+  "username":"azhi",
+	"email":"azhi@gmail.com",
+	"role":"",
 	"password":"123",
 	"address":"",
 	"phone_number":"",
