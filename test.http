@@ -2,8 +2,8 @@
 POST http://localhost:3000/api/auth/register
 
 {
-  "username":"bilal",
-	"email":"bilal@gmail.com",
+  "username":"elang",
+	"email":"elang@gmail.com",
 	"role":"",
 	"password":"123",
 	"address":"",

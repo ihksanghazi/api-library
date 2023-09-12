@@ -3,6 +3,7 @@ package controllers
 import (
 	"encoding/json"
 	"net/http"
+	"time"
 
 	"github.com/go-playground/validator/v10"
 	"github.com/ihksanghazi/api-library/models/web"
@@ -40,7 +41,7 @@ func (a *AuthControllerImpl) RegisterController(w http.ResponseWriter, r *http.R
 		return
 	}
 
-	user, errSer := a.service.RegisterService(req)
+	user, errSer := a.service.RegisterService(&req)
 	if errSer != nil {
 		utils.ResponseError(w, http.StatusInternalServerError, errSer.Error())
 		return
@@ -63,6 +64,24 @@ func (a *AuthControllerImpl) LoginController(w http.ResponseWriter, r *http.Requ
 		return
 	}
 
+	timeRefreshToken := time.Now().Add(time.Hour * 24)
+	timeAccessToken := time.Now().Add(time.Second * 30)
+
+	accessToken, refreshToken, errService := a.service.LoginService(&req, &timeRefreshToken, &timeAccessToken)
+	if errService != nil {
+		utils.ResponseError(w, http.StatusInternalServerError, errService.Error())
+		return
+	}
+
+	// set refresh token to cookies
+	cookie := http.Cookie{
+		Name:     "AccessToken",
+		Value:    *refreshToken,
+		SameSite: http.SameSiteNoneMode,
+		Expires:  timeRefreshToken,
+	}
+	http.SetCookie(w, &cookie)
+
 	// utils
-	utils.ResponseJSON(w, http.StatusAccepted, "OK", req)
+	utils.ResponseJSON(w, http.StatusOK, "Your Access Token", accessToken)
 }
