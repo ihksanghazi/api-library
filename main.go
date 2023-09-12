@@ -31,7 +31,7 @@ func main() {
 
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
-	r.Mount("/api", routers.LoginRouters())
+	r.Mount("/api/auth", routers.LoginRouters())
 
 	http.ListenAndServe(":3000", r)
 }
