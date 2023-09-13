@@ -28,3 +28,6 @@ GET http://localhost:3000/api/auth/token
 
 ### Logout
 DELETE http://localhost:3000/api/auth/logout
+
+### Get All Users
+GET http://localhost:3000/api/user
