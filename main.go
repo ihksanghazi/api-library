@@ -29,7 +29,8 @@ func main() {
 
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
-	r.Mount("/api/auth", routers.LoginRouters(db))
+	r.Mount("/api/auth", routers.AuthRouter(db))
+	r.Mount("/api/user", routers.UserRouter(db))
 
 	http.ListenAndServe(":3000", r)
 }
