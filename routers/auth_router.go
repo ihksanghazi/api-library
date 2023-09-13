@@ -35,6 +35,8 @@ func LoginRouters(db *gorm.DB) *chi.Mux {
 	r.Group(func(r chi.Router) {
 		r.Post("/register", authController.RegisterController)
 		r.Post("/login", authController.LoginController)
+		r.Get("/token", authController.GetTokenController)
+		r.Delete("/logout", authController.LogoutController)
 	})
 
 	return r

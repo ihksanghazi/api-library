@@ -22,3 +22,9 @@ POST http://localhost:3000/api/auth/login
 ### Test Middleware
 GET http://localhost:3000/api/auth/test
 Access-Token: 
+
+### Get Token
+GET http://localhost:3000/api/auth/token
+
+### Logout
+DELETE http://localhost:3000/api/auth/logout
