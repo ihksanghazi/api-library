@@ -21,4 +21,4 @@ POST http://localhost:3000/api/auth/login
 
 ### Test Middleware
 GET http://localhost:3000/api/auth/test
-Access-Token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InNhbmR5IiwiZW1haWwiOiJzYW5keUBnbWFpbC5jb20iLCJleHAiOjE2OTQ1NzMyMDIsImp0aSI6ImRiMDM5N2FiLWZiZjEtNDA1NS1iZmE4LTYzOGE3ZDQ3MmEyMyJ9.tfOOaIcZdZqCxH8gCmyc9Jrrud4Nn88ieyRo-nvYyk4
+Access-Token: 

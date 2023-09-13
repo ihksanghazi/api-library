@@ -22,10 +22,11 @@ func LoginRouters(db *gorm.DB) *chi.Mux {
 	authService := services.NewAuthService(ctx, repo)
 	authController := controllers.NewAuthController(validator, authService)
 
-	middleware := middleware.NewMiddleware()
+	middleware := middleware.NewMiddleware(repo)
 
 	r.Group(func(r chi.Router) {
 		r.Use(middleware.ValidToken)
+		r.Use(middleware.IsAdmin)
 		r.Get("/test", func(w http.ResponseWriter, r *http.Request) {
 			w.Write([]byte("Berhasil Access"))
 		})
