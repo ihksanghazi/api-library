@@ -3,6 +3,7 @@ package controllers
 import (
 	"encoding/json"
 	"net/http"
+	"time"
 
 	"github.com/go-playground/validator/v10"
 	"github.com/ihksanghazi/api-library/models/web"
@@ -12,6 +13,7 @@ import (
 
 type AuthController interface {
 	RegisterController(w http.ResponseWriter, r *http.Request)
+	LoginController(w http.ResponseWriter, r *http.Request)
 }
 
 type AuthControllerImpl struct {
@@ -39,11 +41,47 @@ func (a *AuthControllerImpl) RegisterController(w http.ResponseWriter, r *http.R
 		return
 	}
 
-	user, errSer := a.service.RegisterService(req)
+	user, errSer := a.service.RegisterService(&req)
 	if errSer != nil {
 		utils.ResponseError(w, http.StatusInternalServerError, errSer.Error())
 		return
 	}
 
 	utils.ResponseJSON(w, http.StatusOK, "OK", user)
+}
+
+func (a *AuthControllerImpl) LoginController(w http.ResponseWriter, r *http.Request) {
+	//bind json
+	var req web.LoginWebRequest
+	if errBind := json.NewDecoder(r.Body).Decode(&req); errBind != nil {
+		utils.ResponseError(w, http.StatusBadRequest, errBind.Error())
+		return
+	}
+
+	// validation
+	if errValidation := utils.Validation(a.validator, req); len(errValidation) > 0 {
+		utils.ResponseError(w, http.StatusBadRequest, errValidation)
+		return
+	}
+
+	timeRefreshToken := time.Now().Add(time.Hour * 24)
+	timeAccessToken := time.Now().Add(time.Second * 30)
+
+	accessToken, refreshToken, errService := a.service.LoginService(&req, &timeRefreshToken, &timeAccessToken)
+	if errService != nil {
+		utils.ResponseError(w, http.StatusInternalServerError, errService.Error())
+		return
+	}
+
+	// set refresh token to cookies
+	cookie := http.Cookie{
+		Name:     "AccessToken",
+		Value:    *refreshToken,
+		SameSite: http.SameSiteNoneMode,
+		Expires:  timeRefreshToken,
+	}
+	http.SetCookie(w, &cookie)
+
+	// utils
+	utils.ResponseJSON(w, http.StatusOK, "Your Access Token", accessToken)
 }

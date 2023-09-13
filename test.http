@@ -2,11 +2,23 @@
 POST http://localhost:3000/api/auth/register
 
 {
-  "username":"bilal",
-	"email":"bilal@gmail.com",
+  "username":"elang",
+	"email":"elang@gmail.com",
 	"role":"",
 	"password":"123",
 	"address":"",
 	"phone_number":"",
 	"image_url":""
 }
+
+### Login User
+POST http://localhost:3000/api/auth/login
+
+{
+	"email":"sandy@gmail.com",
+	"password":"123"
+}
+
+### Test Middleware
+GET http://localhost:3000/api/auth/test
+Access-Token: 
