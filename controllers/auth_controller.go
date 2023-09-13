@@ -14,6 +14,7 @@ import (
 type AuthController interface {
 	RegisterController(w http.ResponseWriter, r *http.Request)
 	LoginController(w http.ResponseWriter, r *http.Request)
+	GetTokenController(w http.ResponseWriter, r *http.Request)
 }
 
 type AuthControllerImpl struct {
@@ -84,4 +85,14 @@ func (a *AuthControllerImpl) LoginController(w http.ResponseWriter, r *http.Requ
 
 	// utils
 	utils.ResponseJSON(w, http.StatusOK, "Your Access Token", accessToken)
+}
+
+func (a *AuthControllerImpl) GetTokenController(w http.ResponseWriter, r *http.Request) {
+	refreshToken, errCookie := r.Cookie("AccessToken")
+	if errCookie != nil {
+		utils.ResponseError(w, http.StatusUnauthorized, "Unauthorized")
+		return
+	}
+
+	utils.ResponseJSON(w, http.StatusOK, "OK", refreshToken.Value)
 }
