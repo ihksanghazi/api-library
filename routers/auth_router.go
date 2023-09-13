@@ -2,10 +2,12 @@ package routers
 
 import (
 	"context"
+	"net/http"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-playground/validator/v10"
 	"github.com/ihksanghazi/api-library/controllers"
+	"github.com/ihksanghazi/api-library/middleware"
 	"github.com/ihksanghazi/api-library/repositories"
 	"github.com/ihksanghazi/api-library/services"
 	"gorm.io/gorm"
@@ -20,8 +22,19 @@ func LoginRouters(db *gorm.DB) *chi.Mux {
 	authService := services.NewAuthService(ctx, repo)
 	authController := controllers.NewAuthController(validator, authService)
 
-	r.Post("/register", authController.RegisterController)
-	r.Post("/login", authController.LoginController)
+	middleware := middleware.NewMiddleware()
+
+	r.Group(func(r chi.Router) {
+		r.Use(middleware.ValidToken)
+		r.Get("/test", func(w http.ResponseWriter, r *http.Request) {
+			w.Write([]byte("Berhasil Access"))
+		})
+	})
+
+	r.Group(func(r chi.Router) {
+		r.Post("/register", authController.RegisterController)
+		r.Post("/login", authController.LoginController)
+	})
 
 	return r
 }

@@ -22,3 +22,16 @@ func GenerateToken(req *domain.User, signed string, time time.Time) (string, err
 	result, err := token.SignedString([]byte(signed))
 	return result, err
 }
+
+func ParsingToken(yourToken string, signed string) (claims *domain.JWTClaims, err error) {
+
+	token, errParsing := jwt.ParseWithClaims(yourToken, &domain.JWTClaims{}, func(token *jwt.Token) (interface{}, error) {
+		return []byte(signed), nil
+	})
+
+	if claims, ok := token.Claims.(*domain.JWTClaims); ok && token.Valid {
+		return claims, nil
+	} else {
+		return nil, errParsing
+	}
+}
