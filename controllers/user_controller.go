@@ -1,8 +1,12 @@
 package controllers
 
 import (
+	"encoding/json"
 	"net/http"
+	"strconv"
 
+	"github.com/ihksanghazi/api-library/models/web"
+	"github.com/ihksanghazi/api-library/services"
 	"github.com/ihksanghazi/api-library/utils"
 )
 
@@ -11,12 +15,55 @@ type UserController interface {
 }
 
 type UserControllerImpl struct {
+	service services.UserService
 }
 
-func NewUserController() UserController {
-	return &UserControllerImpl{}
+func NewUserController(service services.UserService) UserController {
+	return &UserControllerImpl{
+		service: service,
+	}
 }
 
 func (u *UserControllerImpl) GetAllUsersController(w http.ResponseWriter, r *http.Request) {
-	utils.ResponseJSON(w, http.StatusOK, "OK", "Test")
+	var totalPage, totalLimit int
+	// get query parameter
+	page := r.URL.Query().Get("page")
+	limit := r.URL.Query().Get("limit")
+
+	if page == "" || limit == "" {
+		totalPage = 1
+		totalLimit = 5
+	} else {
+		// parsing to int
+		pageInt, errPageInt := strconv.Atoi(page)
+		if errPageInt != nil {
+			utils.ResponseError(w, http.StatusBadRequest, errPageInt.Error())
+			return
+		}
+		limitInt, errLimitInt := strconv.Atoi(limit)
+		if errLimitInt != nil {
+			utils.ResponseError(w, http.StatusBadRequest, errPageInt.Error())
+			return
+		}
+
+		totalPage = pageInt
+		totalLimit = limitInt
+	}
+
+	users, totalAllPage, errService := u.service.GetAllUserService(totalPage, totalLimit)
+	if errService != nil {
+		utils.ResponseError(w, http.StatusInternalServerError, errService.Error())
+		return
+	}
+
+	response := web.Pagination{
+		Code:        http.StatusOK,
+		Status:      "OK",
+		CurrentPage: page,
+		TotalPage:   totalAllPage,
+		Data:        users,
+	}
+
+	w.Header().Set("Content-Type", "Application/json")
+	json.NewEncoder(w).Encode(response)
 }
