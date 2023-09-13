@@ -6,6 +6,7 @@ import (
 	"os"
 	"time"
 
+	"github.com/google/uuid"
 	"github.com/ihksanghazi/api-library/models/domain"
 	"github.com/ihksanghazi/api-library/models/web"
 	"github.com/ihksanghazi/api-library/repositories"
@@ -17,6 +18,7 @@ import (
 type AuthService interface {
 	RegisterService(req *web.RegisterWebRequest) (*web.RegisterWebRequest, error)
 	LoginService(req *web.LoginWebRequest, timeRefreshToken *time.Time, timeAccessToken *time.Time) (accessToken *string, refreshToken *string, err error)
+	GetTokenService(refreshToken *string) (accessToken *string, err error)
 }
 
 type AuthServiceImpl struct {
@@ -119,4 +121,26 @@ func (a *AuthServiceImpl) LoginService(req *web.LoginWebRequest, timeRefreshToke
 	})
 
 	return &AccessToken, &RefreshToken, errTransaction
+}
+
+func (a *AuthServiceImpl) GetTokenService(refreshToken *string) (accessToken *string, err error) {
+	// parsing refresh token
+	RefreshToken, errRefreshToken := utils.ParsingToken(*refreshToken, os.Getenv("REFRESH_TOKEN_JWT"))
+	if errRefreshToken != nil {
+		return nil, errRefreshToken
+	}
+
+	id := uuid.MustParse(RefreshToken.ID)
+
+	var req domain.User
+	req.ID = id
+	req.Username = RefreshToken.Username
+	req.Email = RefreshToken.Email
+	// generate access token
+	AccessToken, errAccessToken := utils.GenerateToken(&req, os.Getenv("ACCESS_TOKEN_JWT"), time.Now().Add(time.Second*20))
+	if errAccessToken != nil {
+		return nil, errAccessToken
+	}
+
+	return &AccessToken, nil
 }

@@ -15,6 +15,7 @@ type AuthController interface {
 	RegisterController(w http.ResponseWriter, r *http.Request)
 	LoginController(w http.ResponseWriter, r *http.Request)
 	GetTokenController(w http.ResponseWriter, r *http.Request)
+	LogoutController(w http.ResponseWriter, r *http.Request)
 }
 
 type AuthControllerImpl struct {
@@ -77,6 +78,7 @@ func (a *AuthControllerImpl) LoginController(w http.ResponseWriter, r *http.Requ
 	// set refresh token to cookies
 	cookie := http.Cookie{
 		Name:     "AccessToken",
+		HttpOnly: true,
 		Value:    *refreshToken,
 		SameSite: http.SameSiteNoneMode,
 		Expires:  timeRefreshToken,
@@ -94,5 +96,24 @@ func (a *AuthControllerImpl) GetTokenController(w http.ResponseWriter, r *http.R
 		return
 	}
 
-	utils.ResponseJSON(w, http.StatusOK, "OK", refreshToken.Value)
+	accessToken, errService := a.service.GetTokenService(&refreshToken.Value)
+	if errService != nil {
+		utils.ResponseError(w, http.StatusInternalServerError, errService.Error())
+		return
+	}
+
+	utils.ResponseJSON(w, http.StatusOK, "Your Access Token", accessToken)
+}
+
+func (a *AuthControllerImpl) LogoutController(w http.ResponseWriter, r *http.Request) {
+	// set cookie to -1
+	cookie := http.Cookie{
+		Name:     "AccessToken",
+		SameSite: http.SameSiteNoneMode,
+		HttpOnly: true,
+		MaxAge:   -1,
+	}
+	http.SetCookie(w, &cookie)
+
+	utils.ResponseJSON(w, http.StatusOK, "You Have Logged Out", nil)
 }
