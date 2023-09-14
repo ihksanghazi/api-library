@@ -33,5 +33,5 @@ DELETE http://localhost:3000/api/auth/logout
 GET http://localhost:3000/api/user?page=1&limit=3
 
 ### Get User By Id
-GET http://localhost:3000/api/user/3
+GET http://localhost:3000/api/user/da64b2c1-7307-4f3c-a443-43f5063aab73
 

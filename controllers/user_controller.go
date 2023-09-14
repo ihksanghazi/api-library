@@ -73,5 +73,12 @@ func (u *UserControllerImpl) GetAllUsersController(w http.ResponseWriter, r *htt
 
 func (u *UserControllerImpl) GetUserByIdController(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
-	utils.ResponseJSON(w, http.StatusOK, "OK", id)
+
+	user, err := u.service.GetUserByIdService(id)
+	if err != nil {
+		utils.ResponseError(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	utils.ResponseJSON(w, http.StatusOK, "OK", user)
 }

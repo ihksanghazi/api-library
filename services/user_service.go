@@ -3,23 +3,30 @@ package services
 import (
 	"context"
 
+	"github.com/ihksanghazi/api-library/models/domain"
 	"github.com/ihksanghazi/api-library/models/web"
 	"github.com/ihksanghazi/api-library/repositories"
+	"gorm.io/gorm"
 )
 
 type UserService interface {
 	GetAllUserService(page int, limit int) (users []web.UsersWebResponse, totalPage int64, err error)
+	GetUserByIdService(id string) (user web.UserWebResponse, err error)
 }
 
 type UserServiceImpl struct {
 	repository *repositories.Query
 	ctx        context.Context
+	db         *gorm.DB
+	model      domain.User
 }
 
-func NewUserService(repository *repositories.Query, context context.Context) UserService {
+func NewUserService(repository *repositories.Query, context context.Context, db *gorm.DB, model domain.User) UserService {
 	return &UserServiceImpl{
 		repository: repository,
 		ctx:        context,
+		db:         db,
+		model:      model,
 	}
 }
 
@@ -28,10 +35,16 @@ func (u *UserServiceImpl) GetAllUserService(page int, limit int) (users []web.Us
 	//pagination
 	offset := (page - 1) * limit
 	// getall user by page
-	user := u.repository.User
-	Count, errRepository := user.WithContext(u.ctx).ScanByPage(&result, offset, limit)
+	Count, errRepository := u.repository.User.WithContext(u.ctx).ScanByPage(&result, offset, limit)
 
 	TotalPage := (Count + int64(limit) - 1) / int64(limit)
 
 	return result, TotalPage, errRepository
+}
+
+func (u *UserServiceImpl) GetUserByIdService(id string) (user web.UserWebResponse, err error) {
+	var response web.UserWebResponse
+	// Get User By Id
+	Error := u.db.Model(u.model).WithContext(u.ctx).Where("id = ?", id).Preload("Books.Borrow").First(&response).Error
+	return response, Error
 }
