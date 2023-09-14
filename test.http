@@ -2,8 +2,8 @@
 POST http://localhost:3000/api/auth/register
 
 {
-  "username":"elang",
-	"email":"elang@gmail.com",
+  "username":"bilal",
+	"email":"bilal@gmail.com",
 	"role":"",
 	"password":"123",
 	"address":"",
@@ -28,3 +28,10 @@ GET http://localhost:3000/api/auth/token
 
 ### Logout
 DELETE http://localhost:3000/api/auth/logout
+
+### Get All Users
+GET http://localhost:3000/api/user?page=1&limit=3
+
+### Get User By Id
+GET http://localhost:3000/api/user/da64b2c1-7307-4f3c-a443-43f5063aab73
+

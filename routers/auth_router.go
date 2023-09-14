@@ -13,7 +13,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func LoginRouters(db *gorm.DB) *chi.Mux {
+func AuthRouter(db *gorm.DB) *chi.Mux {
 	r := chi.NewRouter()
 
 	var ctx context.Context

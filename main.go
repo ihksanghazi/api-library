@@ -22,14 +22,15 @@ func main() {
 	db := database.ConnectDB()
 
 	// migration
-	// database.DB.AutoMigrate(domain.User{}, domain.Book{}, domain.Borrowing{})
+	// db.AutoMigrate(domain.User{}, domain.Book{}, domain.Borrowing{})
 
 	//generating query in folder repositories
-	// database.GenerateQuery(database.DB)
+	// database.GenerateQuery(db)
 
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
-	r.Mount("/api/auth", routers.LoginRouters(db))
+	r.Mount("/api/auth", routers.AuthRouter(db))
+	r.Mount("/api/user", routers.UserRouter(db))
 
 	http.ListenAndServe(":3000", r)
 }

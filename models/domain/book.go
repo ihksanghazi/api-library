@@ -18,5 +18,6 @@ type Book struct {
 	UpdatedAt       time.Time      `json:"updated_at"`
 	DeletedAt       gorm.DeletedAt `gorm:"index" json:"deleted_at"`
 	//association
-	Borrowings []Borrowing `gorm:"foreignKey:BookID"`
+	Borrowing Borrowing `gorm:"foreignKey:BookID"`
+	Users     []User    `gorm:"many2many:borrowings;foreignKey:ID;joinForeignKey:BookID;References:ID;joinReferences:UserID"`
 }
