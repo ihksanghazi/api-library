@@ -1,6 +1,8 @@
 package routers
 
 import (
+	"context"
+
 	"github.com/go-chi/chi/v5"
 	"github.com/ihksanghazi/api-library/controllers"
 	"github.com/ihksanghazi/api-library/repositories"
@@ -11,8 +13,9 @@ import (
 func UserRouter(db *gorm.DB) *chi.Mux {
 	r := chi.NewRouter()
 
+	var ctx context.Context
 	repo := repositories.Use(db)
-	userSevice := services.NewUserService(repo)
+	userSevice := services.NewUserService(repo, ctx)
 	userController := controllers.NewUserController(userSevice)
 
 	r.Get("/", userController.GetAllUsersController)
