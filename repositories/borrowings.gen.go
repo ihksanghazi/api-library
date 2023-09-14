@@ -33,17 +33,6 @@ func newBorrowing(db *gorm.DB, opts ...gen.DOOption) borrowing {
 	_borrowing.LoanDate = field.NewTime(tableName, "loan_date")
 	_borrowing.ReturnDate = field.NewTime(tableName, "return_date")
 	_borrowing.Status = field.NewString(tableName, "status")
-	_borrowing.Users = borrowingHasManyUsers{
-		db: db.Session(&gorm.Session{}),
-
-		RelationField: field.NewRelation("Users", "domain.User"),
-	}
-
-	_borrowing.Books = borrowingHasManyBooks{
-		db: db.Session(&gorm.Session{}),
-
-		RelationField: field.NewRelation("Books", "domain.Book"),
-	}
 
 	_borrowing.fillFieldMap()
 
@@ -60,9 +49,6 @@ type borrowing struct {
 	LoanDate   field.Time
 	ReturnDate field.Time
 	Status     field.String
-	Users      borrowingHasManyUsers
-
-	Books borrowingHasManyBooks
 
 	fieldMap map[string]field.Expr
 }
@@ -101,14 +87,13 @@ func (b *borrowing) GetFieldByName(fieldName string) (field.OrderExpr, bool) {
 }
 
 func (b *borrowing) fillFieldMap() {
-	b.fieldMap = make(map[string]field.Expr, 8)
+	b.fieldMap = make(map[string]field.Expr, 6)
 	b.fieldMap["id"] = b.ID
 	b.fieldMap["book_id"] = b.BookID
 	b.fieldMap["user_id"] = b.UserID
 	b.fieldMap["loan_date"] = b.LoanDate
 	b.fieldMap["return_date"] = b.ReturnDate
 	b.fieldMap["status"] = b.Status
-
 }
 
 func (b borrowing) clone(db *gorm.DB) borrowing {
@@ -119,148 +104,6 @@ func (b borrowing) clone(db *gorm.DB) borrowing {
 func (b borrowing) replaceDB(db *gorm.DB) borrowing {
 	b.borrowingDo.ReplaceDB(db)
 	return b
-}
-
-type borrowingHasManyUsers struct {
-	db *gorm.DB
-
-	field.RelationField
-}
-
-func (a borrowingHasManyUsers) Where(conds ...field.Expr) *borrowingHasManyUsers {
-	if len(conds) == 0 {
-		return &a
-	}
-
-	exprs := make([]clause.Expression, 0, len(conds))
-	for _, cond := range conds {
-		exprs = append(exprs, cond.BeCond().(clause.Expression))
-	}
-	a.db = a.db.Clauses(clause.Where{Exprs: exprs})
-	return &a
-}
-
-func (a borrowingHasManyUsers) WithContext(ctx context.Context) *borrowingHasManyUsers {
-	a.db = a.db.WithContext(ctx)
-	return &a
-}
-
-func (a borrowingHasManyUsers) Session(session *gorm.Session) *borrowingHasManyUsers {
-	a.db = a.db.Session(session)
-	return &a
-}
-
-func (a borrowingHasManyUsers) Model(m *domain.Borrowing) *borrowingHasManyUsersTx {
-	return &borrowingHasManyUsersTx{a.db.Model(m).Association(a.Name())}
-}
-
-type borrowingHasManyUsersTx struct{ tx *gorm.Association }
-
-func (a borrowingHasManyUsersTx) Find() (result []*domain.User, err error) {
-	return result, a.tx.Find(&result)
-}
-
-func (a borrowingHasManyUsersTx) Append(values ...*domain.User) (err error) {
-	targetValues := make([]interface{}, len(values))
-	for i, v := range values {
-		targetValues[i] = v
-	}
-	return a.tx.Append(targetValues...)
-}
-
-func (a borrowingHasManyUsersTx) Replace(values ...*domain.User) (err error) {
-	targetValues := make([]interface{}, len(values))
-	for i, v := range values {
-		targetValues[i] = v
-	}
-	return a.tx.Replace(targetValues...)
-}
-
-func (a borrowingHasManyUsersTx) Delete(values ...*domain.User) (err error) {
-	targetValues := make([]interface{}, len(values))
-	for i, v := range values {
-		targetValues[i] = v
-	}
-	return a.tx.Delete(targetValues...)
-}
-
-func (a borrowingHasManyUsersTx) Clear() error {
-	return a.tx.Clear()
-}
-
-func (a borrowingHasManyUsersTx) Count() int64 {
-	return a.tx.Count()
-}
-
-type borrowingHasManyBooks struct {
-	db *gorm.DB
-
-	field.RelationField
-}
-
-func (a borrowingHasManyBooks) Where(conds ...field.Expr) *borrowingHasManyBooks {
-	if len(conds) == 0 {
-		return &a
-	}
-
-	exprs := make([]clause.Expression, 0, len(conds))
-	for _, cond := range conds {
-		exprs = append(exprs, cond.BeCond().(clause.Expression))
-	}
-	a.db = a.db.Clauses(clause.Where{Exprs: exprs})
-	return &a
-}
-
-func (a borrowingHasManyBooks) WithContext(ctx context.Context) *borrowingHasManyBooks {
-	a.db = a.db.WithContext(ctx)
-	return &a
-}
-
-func (a borrowingHasManyBooks) Session(session *gorm.Session) *borrowingHasManyBooks {
-	a.db = a.db.Session(session)
-	return &a
-}
-
-func (a borrowingHasManyBooks) Model(m *domain.Borrowing) *borrowingHasManyBooksTx {
-	return &borrowingHasManyBooksTx{a.db.Model(m).Association(a.Name())}
-}
-
-type borrowingHasManyBooksTx struct{ tx *gorm.Association }
-
-func (a borrowingHasManyBooksTx) Find() (result []*domain.Book, err error) {
-	return result, a.tx.Find(&result)
-}
-
-func (a borrowingHasManyBooksTx) Append(values ...*domain.Book) (err error) {
-	targetValues := make([]interface{}, len(values))
-	for i, v := range values {
-		targetValues[i] = v
-	}
-	return a.tx.Append(targetValues...)
-}
-
-func (a borrowingHasManyBooksTx) Replace(values ...*domain.Book) (err error) {
-	targetValues := make([]interface{}, len(values))
-	for i, v := range values {
-		targetValues[i] = v
-	}
-	return a.tx.Replace(targetValues...)
-}
-
-func (a borrowingHasManyBooksTx) Delete(values ...*domain.Book) (err error) {
-	targetValues := make([]interface{}, len(values))
-	for i, v := range values {
-		targetValues[i] = v
-	}
-	return a.tx.Delete(targetValues...)
-}
-
-func (a borrowingHasManyBooksTx) Clear() error {
-	return a.tx.Clear()
-}
-
-func (a borrowingHasManyBooksTx) Count() int64 {
-	return a.tx.Count()
 }
 
 type borrowingDo struct{ gen.DO }

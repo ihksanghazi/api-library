@@ -36,6 +36,43 @@ func newBook(db *gorm.DB, opts ...gen.DOOption) book {
 	_book.CreatedAt = field.NewTime(tableName, "created_at")
 	_book.UpdatedAt = field.NewTime(tableName, "updated_at")
 	_book.DeletedAt = field.NewField(tableName, "deleted_at")
+	_book.Borrowing = bookHasOneBorrowing{
+		db: db.Session(&gorm.Session{}),
+
+		RelationField: field.NewRelation("Borrowing", "domain.Borrowing"),
+	}
+
+	_book.Users = bookManyToManyUsers{
+		db: db.Session(&gorm.Session{}),
+
+		RelationField: field.NewRelation("Users", "domain.User"),
+		Borrowing: struct {
+			field.RelationField
+		}{
+			RelationField: field.NewRelation("Users.Borrowing", "domain.Borrowing"),
+		},
+		Books: struct {
+			field.RelationField
+			Borrowing struct {
+				field.RelationField
+			}
+			Users struct {
+				field.RelationField
+			}
+		}{
+			RelationField: field.NewRelation("Users.Books", "domain.Book"),
+			Borrowing: struct {
+				field.RelationField
+			}{
+				RelationField: field.NewRelation("Users.Books.Borrowing", "domain.Borrowing"),
+			},
+			Users: struct {
+				field.RelationField
+			}{
+				RelationField: field.NewRelation("Users.Books.Users", "domain.User"),
+			},
+		},
+	}
 
 	_book.fillFieldMap()
 
@@ -55,6 +92,9 @@ type book struct {
 	CreatedAt       field.Time
 	UpdatedAt       field.Time
 	DeletedAt       field.Field
+	Borrowing       bookHasOneBorrowing
+
+	Users bookManyToManyUsers
 
 	fieldMap map[string]field.Expr
 }
@@ -96,7 +136,7 @@ func (b *book) GetFieldByName(fieldName string) (field.OrderExpr, bool) {
 }
 
 func (b *book) fillFieldMap() {
-	b.fieldMap = make(map[string]field.Expr, 9)
+	b.fieldMap = make(map[string]field.Expr, 11)
 	b.fieldMap["id"] = b.ID
 	b.fieldMap["title"] = b.Title
 	b.fieldMap["author"] = b.Author
@@ -106,6 +146,7 @@ func (b *book) fillFieldMap() {
 	b.fieldMap["created_at"] = b.CreatedAt
 	b.fieldMap["updated_at"] = b.UpdatedAt
 	b.fieldMap["deleted_at"] = b.DeletedAt
+
 }
 
 func (b book) clone(db *gorm.DB) book {
@@ -116,6 +157,161 @@ func (b book) clone(db *gorm.DB) book {
 func (b book) replaceDB(db *gorm.DB) book {
 	b.bookDo.ReplaceDB(db)
 	return b
+}
+
+type bookHasOneBorrowing struct {
+	db *gorm.DB
+
+	field.RelationField
+}
+
+func (a bookHasOneBorrowing) Where(conds ...field.Expr) *bookHasOneBorrowing {
+	if len(conds) == 0 {
+		return &a
+	}
+
+	exprs := make([]clause.Expression, 0, len(conds))
+	for _, cond := range conds {
+		exprs = append(exprs, cond.BeCond().(clause.Expression))
+	}
+	a.db = a.db.Clauses(clause.Where{Exprs: exprs})
+	return &a
+}
+
+func (a bookHasOneBorrowing) WithContext(ctx context.Context) *bookHasOneBorrowing {
+	a.db = a.db.WithContext(ctx)
+	return &a
+}
+
+func (a bookHasOneBorrowing) Session(session *gorm.Session) *bookHasOneBorrowing {
+	a.db = a.db.Session(session)
+	return &a
+}
+
+func (a bookHasOneBorrowing) Model(m *domain.Book) *bookHasOneBorrowingTx {
+	return &bookHasOneBorrowingTx{a.db.Model(m).Association(a.Name())}
+}
+
+type bookHasOneBorrowingTx struct{ tx *gorm.Association }
+
+func (a bookHasOneBorrowingTx) Find() (result *domain.Borrowing, err error) {
+	return result, a.tx.Find(&result)
+}
+
+func (a bookHasOneBorrowingTx) Append(values ...*domain.Borrowing) (err error) {
+	targetValues := make([]interface{}, len(values))
+	for i, v := range values {
+		targetValues[i] = v
+	}
+	return a.tx.Append(targetValues...)
+}
+
+func (a bookHasOneBorrowingTx) Replace(values ...*domain.Borrowing) (err error) {
+	targetValues := make([]interface{}, len(values))
+	for i, v := range values {
+		targetValues[i] = v
+	}
+	return a.tx.Replace(targetValues...)
+}
+
+func (a bookHasOneBorrowingTx) Delete(values ...*domain.Borrowing) (err error) {
+	targetValues := make([]interface{}, len(values))
+	for i, v := range values {
+		targetValues[i] = v
+	}
+	return a.tx.Delete(targetValues...)
+}
+
+func (a bookHasOneBorrowingTx) Clear() error {
+	return a.tx.Clear()
+}
+
+func (a bookHasOneBorrowingTx) Count() int64 {
+	return a.tx.Count()
+}
+
+type bookManyToManyUsers struct {
+	db *gorm.DB
+
+	field.RelationField
+
+	Borrowing struct {
+		field.RelationField
+	}
+	Books struct {
+		field.RelationField
+		Borrowing struct {
+			field.RelationField
+		}
+		Users struct {
+			field.RelationField
+		}
+	}
+}
+
+func (a bookManyToManyUsers) Where(conds ...field.Expr) *bookManyToManyUsers {
+	if len(conds) == 0 {
+		return &a
+	}
+
+	exprs := make([]clause.Expression, 0, len(conds))
+	for _, cond := range conds {
+		exprs = append(exprs, cond.BeCond().(clause.Expression))
+	}
+	a.db = a.db.Clauses(clause.Where{Exprs: exprs})
+	return &a
+}
+
+func (a bookManyToManyUsers) WithContext(ctx context.Context) *bookManyToManyUsers {
+	a.db = a.db.WithContext(ctx)
+	return &a
+}
+
+func (a bookManyToManyUsers) Session(session *gorm.Session) *bookManyToManyUsers {
+	a.db = a.db.Session(session)
+	return &a
+}
+
+func (a bookManyToManyUsers) Model(m *domain.Book) *bookManyToManyUsersTx {
+	return &bookManyToManyUsersTx{a.db.Model(m).Association(a.Name())}
+}
+
+type bookManyToManyUsersTx struct{ tx *gorm.Association }
+
+func (a bookManyToManyUsersTx) Find() (result []*domain.User, err error) {
+	return result, a.tx.Find(&result)
+}
+
+func (a bookManyToManyUsersTx) Append(values ...*domain.User) (err error) {
+	targetValues := make([]interface{}, len(values))
+	for i, v := range values {
+		targetValues[i] = v
+	}
+	return a.tx.Append(targetValues...)
+}
+
+func (a bookManyToManyUsersTx) Replace(values ...*domain.User) (err error) {
+	targetValues := make([]interface{}, len(values))
+	for i, v := range values {
+		targetValues[i] = v
+	}
+	return a.tx.Replace(targetValues...)
+}
+
+func (a bookManyToManyUsersTx) Delete(values ...*domain.User) (err error) {
+	targetValues := make([]interface{}, len(values))
+	for i, v := range values {
+		targetValues[i] = v
+	}
+	return a.tx.Delete(targetValues...)
+}
+
+func (a bookManyToManyUsersTx) Clear() error {
+	return a.tx.Clear()
+}
+
+func (a bookManyToManyUsersTx) Count() int64 {
+	return a.tx.Count()
 }
 
 type bookDo struct{ gen.DO }

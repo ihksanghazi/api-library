@@ -22,10 +22,10 @@ func main() {
 	db := database.ConnectDB()
 
 	// migration
-	// database.DB.AutoMigrate(domain.User{}, domain.Book{}, domain.Borrowing{})
+	// db.AutoMigrate(domain.User{}, domain.Book{}, domain.Borrowing{})
 
 	//generating query in folder repositories
-	// database.GenerateQuery(database.DB)
+	// database.GenerateQuery(db)
 
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)

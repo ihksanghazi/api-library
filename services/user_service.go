@@ -29,7 +29,7 @@ func (u *UserServiceImpl) GetAllUserService(page int, limit int) (users []web.Us
 	offset := (page - 1) * limit
 	// getall user by page
 	user := u.repository.User
-	Count, errRepository := user.WithContext(u.ctx).Select(user.ID, user.Username, user.Email, user.PhoneNumber, user.Address, user.ImageUrl).ScanByPage(&result, offset, limit)
+	Count, errRepository := user.WithContext(u.ctx).ScanByPage(&result, offset, limit)
 
 	TotalPage := (Count + int64(limit) - 1) / int64(limit)
 
