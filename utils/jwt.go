@@ -7,14 +7,14 @@ import (
 	"github.com/ihksanghazi/api-library/models/domain"
 )
 
-func GenerateToken(req *domain.User, signed string, time time.Time) (string, error) {
+func GenerateToken(id string, username string, email string, signed string, time time.Time) (string, error) {
 	claims := domain.JWTClaims{
-		Username: req.Username,
-		Email:    req.Email,
+		Username: username,
+		Email:    email,
 		RegisteredClaims: jwt.RegisteredClaims{
 			// A usual scenario is to set the expiration time relative to the current time
 			ExpiresAt: jwt.NewNumericDate(time),
-			ID:        req.ID.String(),
+			ID:        id,
 		},
 	}
 

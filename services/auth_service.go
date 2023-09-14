@@ -6,10 +6,8 @@ import (
 	"os"
 	"time"
 
-	"github.com/google/uuid"
 	"github.com/ihksanghazi/api-library/models/domain"
 	"github.com/ihksanghazi/api-library/models/web"
-	"github.com/ihksanghazi/api-library/repositories"
 	"github.com/ihksanghazi/api-library/utils"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
@@ -22,38 +20,39 @@ type AuthService interface {
 }
 
 type AuthServiceImpl struct {
-	ctx        context.Context
-	repository *repositories.Query
+	ctx   context.Context
+	db    *gorm.DB
+	model domain.User
 }
 
-func NewAuthService(ctx context.Context, repository *repositories.Query) AuthService {
+func NewAuthService(ctx context.Context, db *gorm.DB, model domain.User) AuthService {
 	return &AuthServiceImpl{
-		ctx:        ctx,
-		repository: repository,
+		ctx:   ctx,
+		db:    db,
+		model: model,
 	}
 }
 
 func (a *AuthServiceImpl) RegisterService(req *web.RegisterWebRequest) (*web.RegisterWebRequest, error) {
 	// passing data from request to domain
-	var user domain.User
-	user.Username = req.Username
-	user.Email = req.Email
-	user.Password = req.Password
-	user.Address = req.Address
-	user.PhoneNumber = req.PhoneNumber
-	user.ImageUrl = req.ImageUrl
+	var model domain.User
+	model.Username = req.Username
+	model.Email = req.Email
+	model.Password = req.Password
+	model.Address = req.Address
+	model.PhoneNumber = req.PhoneNumber
+	model.ImageUrl = req.ImageUrl
 	if req.Role == "" {
-		user.Role = "user"
+		model.Role = "user"
 		req.Role = "user"
 	} else {
-		user.Role = req.Role
+		model.Role = req.Role
 	}
 
 	// Transaction
-	errTrans := a.repository.Transaction(func(tx *repositories.Query) error {
+	errTrans := a.db.Transaction(func(tx *gorm.DB) error {
 		// find user by email if already return error
-		_, errRep := tx.User.WithContext(a.ctx).Where(tx.User.Email.Eq(req.Email)).First()
-		if errRep == nil {
+		if errRep := tx.Model(a.model).WithContext(a.ctx).Where("email = ?", req.Email).First(&model).Error; errRep == nil {
 			return errors.New("email is already used")
 		} else if errRep != nil && errRep != gorm.ErrRecordNotFound {
 			return errRep
@@ -65,11 +64,10 @@ func (a *AuthServiceImpl) RegisterService(req *web.RegisterWebRequest) (*web.Reg
 			return errHashPass
 		}
 
-		user.Password = string(hashPassword)
+		model.Password = string(hashPassword)
 		req.Password = string(hashPassword)
-
 		// insert user to database
-		if errCreate := tx.User.WithContext(a.ctx).Create(&user); errCreate != nil {
+		if errCreate := tx.Model(a.model).WithContext(a.ctx).Create(&model).Error; errCreate != nil {
 			return errCreate
 		}
 
@@ -82,9 +80,9 @@ func (a *AuthServiceImpl) RegisterService(req *web.RegisterWebRequest) (*web.Reg
 func (a *AuthServiceImpl) LoginService(req *web.LoginWebRequest, timeRefreshToken *time.Time, timeAccessToken *time.Time) (accessToken *string, refreshToken *string, err error) {
 	var AccessToken, RefreshToken string
 	//transaction
-	errTransaction := a.repository.Transaction(func(tx *repositories.Query) error {
+	errTransaction := a.db.Transaction(func(tx *gorm.DB) error {
 		// find user by email
-		user, errQuery := tx.User.WithContext(a.ctx).Where(tx.User.Email.Eq(req.Email)).First()
+		errQuery := tx.Model(a.model).WithContext(a.ctx).Where("email = ?", req.Email).First(&a.model).Error
 		if errQuery == gorm.ErrRecordNotFound {
 			return errors.New("user not found")
 		} else if errQuery != nil {
@@ -92,18 +90,18 @@ func (a *AuthServiceImpl) LoginService(req *web.LoginWebRequest, timeRefreshToke
 		}
 
 		// matching password
-		if errHash := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(req.Password)); errHash != nil {
+		if errHash := bcrypt.CompareHashAndPassword([]byte(a.model.Password), []byte(req.Password)); errHash != nil {
 			return errors.New("wrong password")
 		}
 
 		// // Generate Refresh Token
-		refreshToken, errRefreshToken := utils.GenerateToken(user, os.Getenv("REFRESH_TOKEN_JWT"), *timeRefreshToken)
+		refreshToken, errRefreshToken := utils.GenerateToken(a.model.ID.String(), a.model.Username, a.model.Email, os.Getenv("REFRESH_TOKEN_JWT"), *timeRefreshToken)
 		if errRefreshToken != nil {
 			return errRefreshToken
 		}
 
 		//insert refresh token to current user
-		_, errUpdate := tx.User.WithContext(a.ctx).Where(tx.User.ID.Eq(user.ID)).Update(tx.User.RefreshToken, refreshToken)
+		errUpdate := tx.Model(a.model).WithContext(a.ctx).Where("id = ?", a.model.ID.String()).Update("refresh_token", refreshToken).Error
 		if errUpdate != nil {
 			return errUpdate
 		}
@@ -111,7 +109,7 @@ func (a *AuthServiceImpl) LoginService(req *web.LoginWebRequest, timeRefreshToke
 		RefreshToken = refreshToken
 
 		// generate access Token
-		accessToken, errAccessToken := utils.GenerateToken(user, os.Getenv("ACCESS_TOKEN_JWT"), *timeAccessToken)
+		accessToken, errAccessToken := utils.GenerateToken(a.model.ID.String(), a.model.Username, a.model.Email, os.Getenv("ACCESS_TOKEN_JWT"), *timeAccessToken)
 		if errAccessToken != nil {
 			return errAccessToken
 		}
@@ -130,14 +128,8 @@ func (a *AuthServiceImpl) GetTokenService(refreshToken *string) (accessToken *st
 		return nil, errRefreshToken
 	}
 
-	id := uuid.MustParse(RefreshToken.ID)
-
-	var req domain.User
-	req.ID = id
-	req.Username = RefreshToken.Username
-	req.Email = RefreshToken.Email
 	// generate access token
-	AccessToken, errAccessToken := utils.GenerateToken(&req, os.Getenv("ACCESS_TOKEN_JWT"), time.Now().Add(time.Second*20))
+	AccessToken, errAccessToken := utils.GenerateToken(RefreshToken.ID, RefreshToken.Username, RefreshToken.Email, os.Getenv("ACCESS_TOKEN_JWT"), time.Now().Add(time.Second*20))
 	if errAccessToken != nil {
 		return nil, errAccessToken
 	}

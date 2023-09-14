@@ -5,7 +5,6 @@ import (
 
 	"github.com/ihksanghazi/api-library/models/domain"
 	"github.com/ihksanghazi/api-library/models/web"
-	"github.com/ihksanghazi/api-library/repositories"
 	"gorm.io/gorm"
 )
 
@@ -15,10 +14,9 @@ type UserService interface {
 }
 
 type UserServiceImpl struct {
-	repository *repositories.Query
-	ctx        context.Context
-	db         *gorm.DB
-	model      domain.User
+	ctx   context.Context
+	db    *gorm.DB
+	model domain.User
 }
 
 func NewUserService(context context.Context, db *gorm.DB, model domain.User) UserService {
