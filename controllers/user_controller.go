@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/go-chi/chi/v5"
 	"github.com/ihksanghazi/api-library/models/web"
 	"github.com/ihksanghazi/api-library/services"
 	"github.com/ihksanghazi/api-library/utils"
@@ -12,6 +13,7 @@ import (
 
 type UserController interface {
 	GetAllUsersController(w http.ResponseWriter, r *http.Request)
+	GetUserByIdController(w http.ResponseWriter, r *http.Request)
 }
 
 type UserControllerImpl struct {
@@ -67,4 +69,9 @@ func (u *UserControllerImpl) GetAllUsersController(w http.ResponseWriter, r *htt
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(response)
+}
+
+func (u *UserControllerImpl) GetUserByIdController(w http.ResponseWriter, r *http.Request) {
+	id := chi.URLParam(r, "id")
+	utils.ResponseJSON(w, http.StatusOK, "OK", id)
 }
