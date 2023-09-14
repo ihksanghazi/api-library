@@ -24,9 +24,6 @@ func main() {
 	// migration
 	// db.AutoMigrate(domain.User{}, domain.Book{}, domain.Borrowing{})
 
-	//generating query in folder repositories
-	// database.GenerateQuery(db)
-
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
 	r.Mount("/api/auth", routers.AuthRouter(db))

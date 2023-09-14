@@ -1,11 +1,13 @@
 package middleware
 
 import (
+	"context"
 	"net/http"
 	"os"
 
-	"github.com/ihksanghazi/api-library/repositories"
+	"github.com/ihksanghazi/api-library/models/domain"
 	"github.com/ihksanghazi/api-library/utils"
+	"gorm.io/gorm"
 )
 
 type Middleware interface {
@@ -14,12 +16,16 @@ type Middleware interface {
 }
 
 type MiddlewareImpl struct {
-	repository *repositories.Query
+	ctx   context.Context
+	db    *gorm.DB
+	model domain.User
 }
 
-func NewMiddleware(repository *repositories.Query) Middleware {
+func NewMiddleware(ctx context.Context, db *gorm.DB, model domain.User) Middleware {
 	return &MiddlewareImpl{
-		repository: repository,
+		ctx:   ctx,
+		db:    db,
+		model: model,
 	}
 }
 
@@ -52,13 +58,13 @@ func (m *MiddlewareImpl) IsAdmin(next http.Handler) http.Handler {
 			return
 		}
 		// get user by refresh token
-		user, errQuery := m.repository.User.Where(m.repository.User.RefreshToken.Eq(refreshToken.Value)).First()
+		errQuery := m.db.Model(m.model).WithContext(m.ctx).Where("refresh_token = ?", refreshToken.Value).First(&m.model).Error
 		if errQuery != nil {
 			utils.ResponseError(w, http.StatusUnauthorized, "Unauthorized")
 			return
 		}
 		// if user not admin return error
-		if user.Role != "admin" {
+		if m.model.Role != "admin" {
 			utils.ResponseError(w, http.StatusUnauthorized, "Not Admin")
 			return
 		}

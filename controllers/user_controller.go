@@ -9,6 +9,7 @@ import (
 	"github.com/ihksanghazi/api-library/models/web"
 	"github.com/ihksanghazi/api-library/services"
 	"github.com/ihksanghazi/api-library/utils"
+	"gorm.io/gorm"
 )
 
 type UserController interface {
@@ -75,6 +76,10 @@ func (u *UserControllerImpl) GetUserByIdController(w http.ResponseWriter, r *htt
 	id := chi.URLParam(r, "id")
 
 	user, err := u.service.GetUserByIdService(id)
+	if err == gorm.ErrRecordNotFound {
+		utils.ResponseError(w, http.StatusNotFound, err.Error())
+		return
+	}
 	if err != nil {
 		utils.ResponseError(w, http.StatusInternalServerError, err.Error())
 		return

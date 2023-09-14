@@ -8,7 +8,7 @@ import (
 	"github.com/go-playground/validator/v10"
 	"github.com/ihksanghazi/api-library/controllers"
 	"github.com/ihksanghazi/api-library/middleware"
-	"github.com/ihksanghazi/api-library/repositories"
+	"github.com/ihksanghazi/api-library/models/domain"
 	"github.com/ihksanghazi/api-library/services"
 	"gorm.io/gorm"
 )
@@ -17,12 +17,12 @@ func AuthRouter(db *gorm.DB) *chi.Mux {
 	r := chi.NewRouter()
 
 	var ctx context.Context
+	var model domain.User
 	validator := validator.New()
-	repo := repositories.Use(db)
-	authService := services.NewAuthService(ctx, repo)
+	authService := services.NewAuthService(ctx, db, model)
 	authController := controllers.NewAuthController(validator, authService)
 
-	middleware := middleware.NewMiddleware(repo)
+	middleware := middleware.NewMiddleware(ctx, db, model)
 
 	r.Group(func(r chi.Router) {
 		r.Use(middleware.ValidToken)

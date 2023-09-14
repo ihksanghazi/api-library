@@ -5,7 +5,6 @@ import (
 
 	"github.com/ihksanghazi/api-library/models/domain"
 	"github.com/ihksanghazi/api-library/models/web"
-	"github.com/ihksanghazi/api-library/repositories"
 	"gorm.io/gorm"
 )
 
@@ -15,31 +14,30 @@ type UserService interface {
 }
 
 type UserServiceImpl struct {
-	repository *repositories.Query
-	ctx        context.Context
-	db         *gorm.DB
-	model      domain.User
+	ctx   context.Context
+	db    *gorm.DB
+	model domain.User
 }
 
-func NewUserService(repository *repositories.Query, context context.Context, db *gorm.DB, model domain.User) UserService {
+func NewUserService(context context.Context, db *gorm.DB, model domain.User) UserService {
 	return &UserServiceImpl{
-		repository: repository,
-		ctx:        context,
-		db:         db,
-		model:      model,
+		ctx:   context,
+		db:    db,
+		model: model,
 	}
 }
 
 func (u *UserServiceImpl) GetAllUserService(page int, limit int) (users []web.UsersWebResponse, totalPage int64, err error) {
 	var result []web.UsersWebResponse
+	var Count int64
 	//pagination
 	offset := (page - 1) * limit
 	// getall user by page
-	Count, errRepository := u.repository.User.WithContext(u.ctx).ScanByPage(&result, offset, limit)
+	Error := u.db.Model(u.model).WithContext(u.ctx).Count(&Count).Offset(offset).Limit(limit).Find(&result).Error
 
 	TotalPage := (Count + int64(limit) - 1) / int64(limit)
 
-	return result, TotalPage, errRepository
+	return result, TotalPage, Error
 }
 
 func (u *UserServiceImpl) GetUserByIdService(id string) (user web.UserWebResponse, err error) {
