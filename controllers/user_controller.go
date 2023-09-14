@@ -59,11 +59,12 @@ func (u *UserControllerImpl) GetAllUsersController(w http.ResponseWriter, r *htt
 	response := web.Pagination{
 		Code:        http.StatusOK,
 		Status:      "OK",
-		CurrentPage: page,
+		CurrentPage: totalPage,
 		TotalPage:   totalAllPage,
 		Data:        users,
 	}
 
-	w.Header().Set("Content-Type", "Application/json")
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(response)
 }

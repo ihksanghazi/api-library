@@ -16,10 +16,9 @@ func ResponseError(w http.ResponseWriter, code int, errorMessage interface{}) er
 		"message": errorMessage,
 	}
 
-	result, err := json.Marshal(response)
-	w.Header().Set("Content-Type", "Application/json")
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(code)
-	w.Write(result)
+	err := json.NewEncoder(w).Encode(response)
 	return err
 }
 
@@ -30,9 +29,8 @@ func ResponseJSON(w http.ResponseWriter, code int, status string, payload interf
 		Data:   payload,
 	}
 
-	result, err := json.Marshal(response)
-	w.Header().Set("Content-Type", "Application/json")
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(code)
-	w.Write(result)
+	err := json.NewEncoder(w).Encode(response)
 	return err
 }

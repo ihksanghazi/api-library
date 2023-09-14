@@ -31,3 +31,4 @@ DELETE http://localhost:3000/api/auth/logout
 
 ### Get All Users
 GET http://localhost:3000/api/user?page=3&limit=3
+
