@@ -3,6 +3,7 @@ package controllers
 import (
 	"encoding/json"
 	"net/http"
+	"strconv"
 
 	"github.com/go-playground/validator/v10"
 	"github.com/ihksanghazi/api-library/models/web"
@@ -12,6 +13,7 @@ import (
 
 type BookController interface {
 	CreateBookController(w http.ResponseWriter, r *http.Request)
+	GetAllBookController(w http.ResponseWriter, r *http.Request)
 }
 
 type BookControllerImpl struct {
@@ -47,4 +49,49 @@ func (b *BookControllerImpl) CreateBookController(w http.ResponseWriter, r *http
 	}
 
 	utils.ResponseJSON(w, http.StatusOK, "OK", result)
+}
+
+func (b *BookControllerImpl) GetAllBookController(w http.ResponseWriter, r *http.Request) {
+	var totalPage, totalLimit int
+	page := r.URL.Query().Get("page")
+	limit := r.URL.Query().Get("limit")
+
+	if page == "" || limit == "" {
+		totalPage = 1
+		totalLimit = 5
+	} else {
+		// parsing to int
+		pageInt, errPageInt := strconv.Atoi(page)
+		if errPageInt != nil {
+			utils.ResponseError(w, http.StatusBadRequest, errPageInt.Error())
+			return
+		}
+		limitInt, errLimitInt := strconv.Atoi(limit)
+		if errLimitInt != nil {
+			utils.ResponseError(w, http.StatusBadRequest, errPageInt.Error())
+			return
+		}
+
+		totalPage = pageInt
+		totalLimit = limitInt
+	}
+
+	result, totalAllPage, errService := b.service.GetAllBookService(totalPage, totalLimit)
+	if errService != nil {
+		utils.ResponseError(w, http.StatusInternalServerError, errService.Error())
+		return
+	}
+
+	response := web.Pagination{
+		Code:        http.StatusOK,
+		Status:      "OK",
+		CurrentPage: totalPage,
+		TotalPage:   totalAllPage,
+		Data:        result,
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(response)
+
 }
