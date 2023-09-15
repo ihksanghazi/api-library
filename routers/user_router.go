@@ -24,6 +24,7 @@ func UserRouter(db *gorm.DB) *chi.Mux {
 	r.Get("/", userController.GetAllUsersController)
 	r.Get("/{id}", userController.GetUserByIdController)
 	r.Put("/{id}", userController.UpdateUserController)
+	r.Delete("/{id}", userController.DeleteUserController)
 
 	return r
 }

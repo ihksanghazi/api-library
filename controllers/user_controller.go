@@ -17,6 +17,7 @@ type UserController interface {
 	GetAllUsersController(w http.ResponseWriter, r *http.Request)
 	GetUserByIdController(w http.ResponseWriter, r *http.Request)
 	UpdateUserController(w http.ResponseWriter, r *http.Request)
+	DeleteUserController(w http.ResponseWriter, r *http.Request)
 }
 
 type UserControllerImpl struct {
@@ -116,4 +117,10 @@ func (u *UserControllerImpl) UpdateUserController(w http.ResponseWriter, r *http
 	}
 
 	utils.ResponseJSON(w, http.StatusOK, "OK", result)
+}
+
+func (u *UserControllerImpl) DeleteUserController(w http.ResponseWriter, r *http.Request) {
+	id := chi.URLParam(r, "id")
+
+	utils.ResponseJSON(w, http.StatusOK, "OK", id)
 }
