@@ -28,6 +28,7 @@ func main() {
 	r.Use(middleware.Logger)
 	r.Mount("/api/auth", routers.AuthRouter(db))
 	r.Mount("/api/user", routers.UserRouter(db))
+	r.Mount("/api/book", routers.BookRouter(db))
 
 	http.ListenAndServe(":3000", r)
 }
