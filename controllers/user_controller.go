@@ -17,6 +17,7 @@ type UserController interface {
 	GetAllUsersController(w http.ResponseWriter, r *http.Request)
 	GetUserByIdController(w http.ResponseWriter, r *http.Request)
 	UpdateUserController(w http.ResponseWriter, r *http.Request)
+	DeleteUserController(w http.ResponseWriter, r *http.Request)
 }
 
 type UserControllerImpl struct {
@@ -111,9 +112,20 @@ func (u *UserControllerImpl) UpdateUserController(w http.ResponseWriter, r *http
 
 	result, errService := u.service.UpdateUserService(userId, req)
 	if errService != nil {
-		utils.ResponseError(w, http.StatusBadRequest, errService.Error())
+		utils.ResponseError(w, http.StatusInternalServerError, errService.Error())
 		return
 	}
 
 	utils.ResponseJSON(w, http.StatusOK, "OK", result)
+}
+
+func (u *UserControllerImpl) DeleteUserController(w http.ResponseWriter, r *http.Request) {
+	id := chi.URLParam(r, "id")
+
+	if err := u.service.DeleteUserService(id); err != nil {
+		utils.ResponseError(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	utils.ResponseJSON(w, http.StatusOK, "OK", "Success Deleted User With Id '"+id+"'")
 }

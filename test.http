@@ -35,7 +35,7 @@ GET http://localhost:3000/api/user?page=1&limit=20
 ### Get User By Id
 GET http://localhost:3000/api/user/b1568547-27bc-4d98-a6a6-607a3aad0537
 
-### Update User
+### Update User By Id
 PUT http://localhost:3000/api/user/a94ba261-f835-47ba-8f11-8473a67493ce
 
 {
@@ -46,3 +46,6 @@ PUT http://localhost:3000/api/user/a94ba261-f835-47ba-8f11-8473a67493ce
 	"phone_number":"",
 	"image_url":""
 }
+
+### Delete User By Id
+DELETE http://localhost:3000/api/user/faa2c298-111e-43c0-9b9c-c4559011fb82

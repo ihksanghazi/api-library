@@ -13,6 +13,7 @@ type UserService interface {
 	GetAllUserService(page int, limit int) (users []web.UsersWebResponse, totalPage int64, err error)
 	GetUserByIdService(id string) (user web.UserWebResponse, err error)
 	UpdateUserService(id string, req web.UpdateUserWebRequest) (result web.UpdateUserWebRequest, err error)
+	DeleteUserService(id string) (err error)
 }
 
 type UserServiceImpl struct {
@@ -71,4 +72,15 @@ func (u *UserServiceImpl) UpdateUserService(id string, req web.UpdateUserWebRequ
 		return nil
 	})
 	return req, errTransaction
+}
+
+func (u *UserServiceImpl) DeleteUserService(id string) (err error) {
+	// transaction
+	errTransaction := u.db.Transaction(func(tx *gorm.DB) error {
+		if err := tx.Model(u.model).WithContext(u.ctx).Where("id = ?", id).Delete(&u.model).Error; err != nil {
+			return err
+		}
+		return nil
+	})
+	return errTransaction
 }
