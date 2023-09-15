@@ -30,19 +30,19 @@ GET http://localhost:3000/api/auth/token
 DELETE http://localhost:3000/api/auth/logout
 
 ### Get All Users
-GET http://localhost:3000/api/user?page=1&limit=4
+GET http://localhost:3000/api/user?page=1&limit=20
 
 ### Get User By Id
 GET http://localhost:3000/api/user/b1568547-27bc-4d98-a6a6-607a3aad0537
 
 ### Update User
-PUT http://localhost:3000/api/user/5d90f675-568a-4d66-b4cd-403efc31b173
+PUT http://localhost:3000/api/user/a94ba261-f835-47ba-8f11-8473a67493ce
 
 {
-  "username":"Nursandy Ihksan",
-	"email":"nursandyihksan@gmail.com",
+  "username":"Andri Ramdani",
+	"email":"andriramdani@gmail.com",
 	"password":"",
-	"address":"Jl. Panjang Cidodol",
-	"phone_number":"089654774184",
+	"address":"",
+	"phone_number":"",
 	"image_url":""
 }

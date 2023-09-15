@@ -51,20 +51,21 @@ func (u *UserServiceImpl) GetUserByIdService(id string) (user web.UserWebRespons
 
 func (u *UserServiceImpl) UpdateUserService(id string, req web.UpdateUserWebRequest) (result web.UpdateUserWebRequest, err error) {
 	// parsing to domain
-	u.model.Username = req.Username
-	u.model.Email = req.Email
-	u.model.PhoneNumber = req.PhoneNumber
-	u.model.Address = req.Address
-	u.model.ImageUrl = req.ImageUrl
-	u.model.Password = req.Password
+	var domain domain.User
+	domain.Username = req.Username
+	domain.Email = req.Email
+	domain.PhoneNumber = req.PhoneNumber
+	domain.Address = req.Address
+	domain.ImageUrl = req.ImageUrl
+	domain.Password = req.Password
 	if req.Password != "" {
 		newPassword, _ := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
-		u.model.Password = string(newPassword)
+		domain.Password = string(newPassword)
 		req.Password = string(newPassword)
 	}
 	// transaction
 	errTransaction := u.db.Transaction(func(tx *gorm.DB) error {
-		if err := tx.Model(u.model).WithContext(u.ctx).Where("id = ?", id).Updates(u.model).Error; err != nil {
+		if err := tx.Model(u.model).WithContext(u.ctx).Where("id = ?", id).Updates(domain).Error; err != nil {
 			return err
 		}
 		return nil
