@@ -11,6 +11,7 @@ import (
 type BookService interface {
 	CreateBookService(req web.CreateBookWebRequest) (result web.CreateBookWebRequest, err error)
 	GetAllBookService(page int, limit int) (result []web.GetAllBooksWebResponse, totalPage int64, err error)
+	UpdateBookService(id string, req web.UpdateBookWebRequest) (result web.UpdateBookWebRequest, err error)
 }
 
 type BookServiceImpl struct {
@@ -56,4 +57,22 @@ func (b *BookServiceImpl) GetAllBookService(page int, limit int) (result []web.G
 	TotalPage := (Count + int64(limit) - 1) / int64(limit)
 
 	return response, TotalPage, error
+}
+
+func (b *BookServiceImpl) UpdateBookService(id string, req web.UpdateBookWebRequest) (result web.UpdateBookWebRequest, err error) {
+	// parsing to model
+	var model domain.Book
+	model.Title = req.Title
+	model.Author = req.Author
+	model.PublicationYear = req.PublicationYear
+	model.Total = req.Total
+	model.ImageUrl = req.ImageUrl
+	// transaction
+	errTransaction := b.db.Transaction(func(tx *gorm.DB) error {
+		if err := tx.Model(b.model).WithContext(b.ctx).Where("id = ?", id).Updates(model).Error; err != nil {
+			return err
+		}
+		return nil
+	})
+	return req, errTransaction
 }

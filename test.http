@@ -63,3 +63,14 @@ POST http://localhost:3000/api/book
 
 ### Get All Books
 GET http://localhost:3000/api/book?page=1&limit=3
+
+### Update Book By Id
+PUT http://localhost:3000/api/book/edf6d61e-a875-4f0a-a430-5a73bcdd6707
+
+{
+	"title":"Mendaki Gunung Rinjani",
+	"author":"Rafflyansyah",
+	"publicaion_year":0,
+	"image_url":"",
+	"total":0
+}
