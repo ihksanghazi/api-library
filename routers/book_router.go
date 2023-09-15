@@ -1,18 +1,19 @@
 package routers
 
 import (
-	"net/http"
-
 	"github.com/go-chi/chi/v5"
+	"github.com/go-playground/validator/v10"
+	"github.com/ihksanghazi/api-library/controllers"
 	"gorm.io/gorm"
 )
 
 func BookRouter(db *gorm.DB) *chi.Mux {
 	r := chi.NewRouter()
 
-	r.Post("/", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("Hello Book"))
-	})
+	validate := validator.New()
+	bookController := controllers.NewBookController(validate)
+
+	r.Post("/", bookController.CreateBookController)
 
 	return r
 }
