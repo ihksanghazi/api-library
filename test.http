@@ -54,9 +54,9 @@ DELETE http://localhost:3000/api/user/faa2c298-111e-43c0-9b9c-c4559011fb82
 POST http://localhost:3000/api/book
 
 {
-	"title":"Memancing Keributan",
+	"title":"Cita Cita Ku Di NASA",
 	"author":"Azhi Muahnaf Rais",
-	"publicaion_year":2019,
+	"publicaion_year":2020,
 	"image_url":"",
-	"total":200
+	"total":50
 }

@@ -6,6 +6,7 @@ import (
 
 	"github.com/go-playground/validator/v10"
 	"github.com/ihksanghazi/api-library/models/web"
+	"github.com/ihksanghazi/api-library/services"
 	"github.com/ihksanghazi/api-library/utils"
 )
 
@@ -15,11 +16,13 @@ type BookController interface {
 
 type BookControllerImpl struct {
 	validate *validator.Validate
+	service  services.BookService
 }
 
-func NewBookController(validate *validator.Validate) BookController {
+func NewBookController(validate *validator.Validate, service services.BookService) BookController {
 	return &BookControllerImpl{
 		validate: validate,
+		service:  service,
 	}
 }
 
@@ -37,5 +40,11 @@ func (b *BookControllerImpl) CreateBookController(w http.ResponseWriter, r *http
 		return
 	}
 
-	utils.ResponseJSON(w, http.StatusOK, "OK", req)
+	result, errService := b.service.CreateBookService(req)
+	if errService != nil {
+		utils.ResponseError(w, http.StatusInternalServerError, errService.Error())
+		return
+	}
+
+	utils.ResponseJSON(w, http.StatusOK, "OK", result)
 }
