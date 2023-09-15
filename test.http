@@ -35,3 +35,15 @@ GET http://localhost:3000/api/user?page=1&limit=4
 ### Get User By Id
 GET http://localhost:3000/api/user/b1568547-27bc-4d98-a6a6-607a3aad0537
 
+### Update User
+PUT http://localhost:3000/api/user/2
+
+{
+  "username":"",
+	"email":"",
+	"role":"",
+	"password":"",
+	"address":"",
+	"phone_number":"",
+	"image_url":""
+}
