@@ -74,3 +74,6 @@ PUT http://localhost:3000/api/book/edf6d61e-a875-4f0a-a430-5a73bcdd6707
 	"image_url":"",
 	"total":0
 }
+
+### Delete Book By Id
+DELETE  http://localhost:3000/api/book/edf6d61e-a875-4f0a-a430-5a73bcdd6707
