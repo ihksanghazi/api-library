@@ -21,6 +21,15 @@ type LoginWebRequest struct {
 	Password string `json:"password" validate:"required"`
 }
 
+type UpdateUserWebRequest struct {
+	Username    string `json:"username"`
+	Email       string `json:"email" validate:"omitempty,email"`
+	Password    string `json:"password"`
+	Address     string `json:"address"`
+	PhoneNumber string `json:"phone_number"`
+	ImageUrl    string `json:"image_url" validate:"omitempty,url"`
+}
+
 type UsersWebResponse struct {
 	ID          uuid.UUID `json:"id"`
 	Username    string    `json:"username"`

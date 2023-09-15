@@ -6,6 +6,7 @@ import (
 	"strconv"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/go-playground/validator/v10"
 	"github.com/ihksanghazi/api-library/models/web"
 	"github.com/ihksanghazi/api-library/services"
 	"github.com/ihksanghazi/api-library/utils"
@@ -15,15 +16,18 @@ import (
 type UserController interface {
 	GetAllUsersController(w http.ResponseWriter, r *http.Request)
 	GetUserByIdController(w http.ResponseWriter, r *http.Request)
+	UpdateUserController(w http.ResponseWriter, r *http.Request)
 }
 
 type UserControllerImpl struct {
-	service services.UserService
+	service  services.UserService
+	validate *validator.Validate
 }
 
-func NewUserController(service services.UserService) UserController {
+func NewUserController(service services.UserService, validate *validator.Validate) UserController {
 	return &UserControllerImpl{
-		service: service,
+		service:  service,
+		validate: validate,
 	}
 }
 
@@ -86,4 +90,30 @@ func (u *UserControllerImpl) GetUserByIdController(w http.ResponseWriter, r *htt
 	}
 
 	utils.ResponseJSON(w, http.StatusOK, "OK", user)
+}
+
+func (u *UserControllerImpl) UpdateUserController(w http.ResponseWriter, r *http.Request) {
+	// get user id
+	userId := chi.URLParam(r, "id")
+
+	// bind request
+	var req web.UpdateUserWebRequest
+	if errBind := json.NewDecoder(r.Body).Decode(&req); errBind != nil {
+		utils.ResponseError(w, http.StatusBadRequest, errBind.Error())
+		return
+	}
+
+	// validation
+	if errVal := utils.Validation(u.validate, &req); len(errVal) > 0 {
+		utils.ResponseError(w, http.StatusBadRequest, errVal)
+		return
+	}
+
+	result, errService := u.service.UpdateUserService(userId, req)
+	if errService != nil {
+		utils.ResponseError(w, http.StatusBadRequest, errService.Error())
+		return
+	}
+
+	utils.ResponseJSON(w, http.StatusOK, "OK", result)
 }
