@@ -121,5 +121,10 @@ func (b *BookControllerImpl) UpdateBookController(w http.ResponseWriter, r *http
 func (b *BookControllerImpl) DeleteBookController(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
 
-	utils.ResponseJSON(w, http.StatusOK, "OK", id)
+	if err := b.service.DeleteBookService(id); err != nil {
+		utils.ResponseError(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	utils.ResponseJSON(w, http.StatusOK, "OK", "Succes Delete Book With Id '"+id+"'")
 }
