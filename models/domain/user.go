@@ -21,5 +21,5 @@ type User struct {
 	UpdatedAt    time.Time      `json:"updated_at"`
 	DeletedAt    gorm.DeletedAt `gorm:"index" json:"deleted_at"`
 	//association
-	Books []Book `gorm:"many2many:borrowings;foreignKey:ID;joinForeignKey:UserID;References:ID;joinReferences:BookID"`
+	Borrowings []Borrowing `gorm:"foreignKey:UserID"`
 }
