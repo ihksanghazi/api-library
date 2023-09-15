@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/go-chi/chi/v5"
 	"github.com/go-playground/validator/v10"
 	"github.com/ihksanghazi/api-library/models/web"
 	"github.com/ihksanghazi/api-library/services"
@@ -14,6 +15,7 @@ import (
 type BookController interface {
 	CreateBookController(w http.ResponseWriter, r *http.Request)
 	GetAllBookController(w http.ResponseWriter, r *http.Request)
+	UpdateBookController(w http.ResponseWriter, r *http.Request)
 }
 
 type BookControllerImpl struct {
@@ -94,4 +96,10 @@ func (b *BookControllerImpl) GetAllBookController(w http.ResponseWriter, r *http
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(response)
 
+}
+
+func (b *BookControllerImpl) UpdateBookController(w http.ResponseWriter, r *http.Request) {
+	id := chi.URLParam(r, "id")
+
+	utils.ResponseJSON(w, http.StatusOK, "OK", id)
 }
