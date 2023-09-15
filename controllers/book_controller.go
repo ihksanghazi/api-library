@@ -101,5 +101,18 @@ func (b *BookControllerImpl) GetAllBookController(w http.ResponseWriter, r *http
 func (b *BookControllerImpl) UpdateBookController(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
 
-	utils.ResponseJSON(w, http.StatusOK, "OK", id)
+	// bind req
+	var req web.UpdateBookWebRequest
+	if errBind := json.NewDecoder(r.Body).Decode(&req); errBind != nil {
+		utils.ResponseError(w, http.StatusBadRequest, errBind.Error())
+		return
+	}
+
+	result, errService := b.service.UpdateBookService(id, req)
+	if errService != nil {
+		utils.ResponseError(w, http.StatusInternalServerError, errService.Error())
+		return
+	}
+
+	utils.ResponseJSON(w, http.StatusOK, "OK", result)
 }

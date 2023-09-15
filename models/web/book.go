@@ -12,6 +12,14 @@ type CreateBookWebRequest struct {
 	Total           int    `json:"total" validate:"required"`
 }
 
+type UpdateBookWebRequest struct {
+	Title           string `json:"title"`
+	Author          string `json:"author"`
+	PublicationYear int    `json:"publicaion_year"`
+	ImageUrl        string `json:"image_url"`
+	Total           int    `json:"total"`
+}
+
 type GetAllBooksWebResponse struct {
 	ID              uuid.UUID `json:"id"`
 	Title           string    `json:"title"`
