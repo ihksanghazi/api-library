@@ -16,6 +16,7 @@ type BookController interface {
 	CreateBookController(w http.ResponseWriter, r *http.Request)
 	GetAllBookController(w http.ResponseWriter, r *http.Request)
 	UpdateBookController(w http.ResponseWriter, r *http.Request)
+	DeleteBookController(w http.ResponseWriter, r *http.Request)
 }
 
 type BookControllerImpl struct {
@@ -115,4 +116,10 @@ func (b *BookControllerImpl) UpdateBookController(w http.ResponseWriter, r *http
 	}
 
 	utils.ResponseJSON(w, http.StatusOK, "OK", result)
+}
+
+func (b *BookControllerImpl) DeleteBookController(w http.ResponseWriter, r *http.Request) {
+	id := chi.URLParam(r, "id")
+
+	utils.ResponseJSON(w, http.StatusOK, "OK", id)
 }
