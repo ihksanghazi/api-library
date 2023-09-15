@@ -112,7 +112,7 @@ func (u *UserControllerImpl) UpdateUserController(w http.ResponseWriter, r *http
 
 	result, errService := u.service.UpdateUserService(userId, req)
 	if errService != nil {
-		utils.ResponseError(w, http.StatusBadRequest, errService.Error())
+		utils.ResponseError(w, http.StatusInternalServerError, errService.Error())
 		return
 	}
 
@@ -122,5 +122,10 @@ func (u *UserControllerImpl) UpdateUserController(w http.ResponseWriter, r *http
 func (u *UserControllerImpl) DeleteUserController(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
 
-	utils.ResponseJSON(w, http.StatusOK, "OK", id)
+	if err := u.service.DeleteUserService(id); err != nil {
+		utils.ResponseError(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	utils.ResponseJSON(w, http.StatusOK, "OK", "Success Deleted User With Id '"+id+"'")
 }
