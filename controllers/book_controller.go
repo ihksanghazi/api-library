@@ -12,6 +12,7 @@ import (
 
 type BookController interface {
 	CreateBookController(w http.ResponseWriter, r *http.Request)
+	GetAllBookController(w http.ResponseWriter, r *http.Request)
 }
 
 type BookControllerImpl struct {
@@ -47,4 +48,8 @@ func (b *BookControllerImpl) CreateBookController(w http.ResponseWriter, r *http
 	}
 
 	utils.ResponseJSON(w, http.StatusOK, "OK", result)
+}
+
+func (b *BookControllerImpl) GetAllBookController(w http.ResponseWriter, r *http.Request) {
+	utils.ResponseJSON(w, http.StatusOK, "OK", "Test")
 }

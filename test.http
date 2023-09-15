@@ -60,3 +60,6 @@ POST http://localhost:3000/api/book
 	"image_url":"",
 	"total":50
 }
+
+### Get All Books
+GET http://localhost:3000/api/book
