@@ -10,17 +10,20 @@ import (
 
 type BookService interface {
 	CreateBookService(req web.CreateBookWebRequest) (result web.CreateBookWebRequest, err error)
+	GetAllBookService(page int, limit int) (result []web.GetAllBooksWebResponse, totalPage int64, err error)
 }
 
 type BookServiceImpl struct {
-	db  *gorm.DB
-	ctx context.Context
+	db    *gorm.DB
+	ctx   context.Context
+	model domain.Book
 }
 
-func NewBookService(db *gorm.DB, ctx context.Context) BookService {
+func NewBookService(db *gorm.DB, ctx context.Context, model domain.Book) BookService {
 	return &BookServiceImpl{
-		db:  db,
-		ctx: ctx,
+		db:    db,
+		ctx:   ctx,
+		model: model,
 	}
 }
 
@@ -40,4 +43,17 @@ func (b *BookServiceImpl) CreateBookService(req web.CreateBookWebRequest) (resul
 		return nil
 	})
 	return req, errTransaction
+}
+
+func (b *BookServiceImpl) GetAllBookService(page int, limit int) (result []web.GetAllBooksWebResponse, totalPage int64, err error) {
+	var response []web.GetAllBooksWebResponse
+	var Count int64
+	//pagination
+	offset := (page - 1) * limit
+	// getall user by page
+	error := b.db.Model(b.model).WithContext(b.ctx).Count(&Count).Offset(offset).Limit(limit).Find(&response).Error
+
+	TotalPage := (Count + int64(limit) - 1) / int64(limit)
+
+	return response, TotalPage, error
 }
