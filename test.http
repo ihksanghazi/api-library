@@ -15,8 +15,8 @@ POST http://localhost:3000/api/auth/register
 POST http://localhost:3000/api/auth/login
 
 {
-	"email":"rizky@gmail.com",
-	"password":"123"
+	"email":"nursandyihksan@gmail.com",
+	"password":"admin123"
 }
 
 ### Test Middleware
@@ -36,14 +36,13 @@ GET http://localhost:3000/api/user?page=1&limit=4
 GET http://localhost:3000/api/user/b1568547-27bc-4d98-a6a6-607a3aad0537
 
 ### Update User
-PUT http://localhost:3000/api/user/2
+PUT http://localhost:3000/api/user/5d90f675-568a-4d66-b4cd-403efc31b173
 
 {
-  "username":"",
-	"email":"",
-	"role":"",
+  "username":"Nursandy Ihksan",
+	"email":"nursandyihksan@gmail.com",
 	"password":"",
-	"address":"",
-	"phone_number":"",
+	"address":"Jl. Panjang Cidodol",
+	"phone_number":"089654774184",
 	"image_url":""
 }

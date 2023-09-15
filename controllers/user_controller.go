@@ -109,5 +109,11 @@ func (u *UserControllerImpl) UpdateUserController(w http.ResponseWriter, r *http
 		return
 	}
 
-	utils.ResponseJSON(w, http.StatusOK, "OK", userId)
+	result, errService := u.service.UpdateUserService(userId, req)
+	if errService != nil {
+		utils.ResponseError(w, http.StatusBadRequest, errService.Error())
+		return
+	}
+
+	utils.ResponseJSON(w, http.StatusOK, "OK", result)
 }
