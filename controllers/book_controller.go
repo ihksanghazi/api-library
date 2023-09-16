@@ -20,6 +20,7 @@ type BookController interface {
 	DeleteBookController(w http.ResponseWriter, r *http.Request)
 	GetBookByIdController(w http.ResponseWriter, r *http.Request)
 	BorrowBookController(w http.ResponseWriter, r *http.Request)
+	ReturnBookController(w http.ResponseWriter, r *http.Request)
 }
 
 type BookControllerImpl struct {
@@ -163,6 +164,32 @@ func (b *BookControllerImpl) BorrowBookController(w http.ResponseWriter, r *http
 	}
 
 	if errService := b.service.BorrowBookService(user.ID, bookId); errService != nil {
+		utils.ResponseError(w, http.StatusInternalServerError, errService.Error())
+		return
+	}
+
+	utils.ResponseJSON(w, http.StatusOK, "OK", "Success To Borrow A Book with ID '"+bookId+"'")
+}
+
+func (b *BookControllerImpl) ReturnBookController(w http.ResponseWriter, r *http.Request) {
+	// get book id
+	bookId := chi.URLParam(r, "id")
+
+	// get refresh token for get user id
+	refreshToken, errCookie := r.Cookie("AccessToken")
+	if errCookie != nil {
+		utils.ResponseError(w, http.StatusUnauthorized, "Unauthorized")
+		return
+	}
+
+	// get user id
+	user, errParsing := utils.ParsingToken(refreshToken.Value, os.Getenv("REFRESH_TOKEN_JWT"))
+	if errParsing != nil {
+		utils.ResponseError(w, http.StatusUnauthorized, "Unauthorized")
+		return
+	}
+
+	if errService := b.service.ReturnBookService(bookId, user.ID); errService != nil {
 		utils.ResponseError(w, http.StatusInternalServerError, errService.Error())
 		return
 	}

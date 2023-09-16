@@ -18,6 +18,7 @@ type BookService interface {
 	DeleteBookService(id string) (err error)
 	GetBookByIdService(id string) (result web.BookWebResponse, err error)
 	BorrowBookService(userId string, bookId string) (err error)
+	ReturnBookService(bookId string, userId string) (err error)
 }
 
 type BookServiceImpl struct {
@@ -130,6 +131,21 @@ func (b *BookServiceImpl) BorrowBookService(userId string, bookId string) (err e
 			return errCreate
 		}
 		if errUpdate := tx.Model(b.book).WithContext(b.ctx).Where("id = ?", bookId).Update("total", gorm.Expr("total - ?", 1)).Error; errUpdate != nil {
+			return errUpdate
+		}
+		return nil
+	})
+
+	return errTransaction
+}
+
+func (b *BookServiceImpl) ReturnBookService(bookId string, userId string) (err error) {
+	//transaction
+	errTransaction := b.db.Transaction(func(tx *gorm.DB) error {
+		if errDelete := tx.Model(b.borrow).WithContext(b.ctx).Where("user_id = ?", userId).Delete(&b.borrow).Error; errDelete != nil {
+			return errDelete
+		}
+		if errUpdate := tx.Model(b.book).WithContext(b.ctx).Where("id = ?", bookId).Update("total", gorm.Expr("total + ?", 1)).Error; errUpdate != nil {
 			return errUpdate
 		}
 		return nil
