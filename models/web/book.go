@@ -1,6 +1,8 @@
 package web
 
 import (
+	"time"
+
 	"github.com/google/uuid"
 )
 
@@ -20,7 +22,7 @@ type UpdateBookWebRequest struct {
 	Total           int    `json:"total"`
 }
 
-type GetAllBooksWebResponse struct {
+type BooksWebResponse struct {
 	ID              uuid.UUID `json:"id"`
 	Title           string    `json:"title"`
 	Author          string    `json:"author"`
@@ -29,7 +31,24 @@ type GetAllBooksWebResponse struct {
 	Total           int       `json:"total"`
 }
 
-type BooksWebResponse struct {
+type BookWebResponse struct {
+	ID              uuid.UUID `json:"id"`
+	Title           string    `json:"title"`
+	Author          string    `json:"author"`
+	PublicationYear int       `json:"publicaion_year"`
+	ImageUrl        string    `json:"image_url"`
+	Total           int       `json:"total"`
+	CreatedAt       time.Time `json:"created_at"`
+	UpdatedAt       time.Time `json:"updated_at"`
+	// Association
+	Users []UsersBorrowWebResponse `gorm:"many2many:borrowings;foreignKey:ID;joinForeignKey:BookID;References:ID;joinReferences:UserID" json:"list_of_users"`
+}
+
+func (b *BookWebResponse) TableName() string {
+	return "books"
+}
+
+type BooksBorrowWebResponse struct {
 	ID              uuid.UUID `json:"id"`
 	Title           string    `json:"title"`
 	Author          string    `json:"author"`
@@ -39,6 +58,6 @@ type BooksWebResponse struct {
 	Borrow BorrowingWebResponse `gorm:"foreignKey:BookID" json:"borrowing_status"`
 }
 
-func (b *BooksWebResponse) TableName() string {
+func (b *BooksBorrowWebResponse) TableName() string {
 	return "books"
 }
