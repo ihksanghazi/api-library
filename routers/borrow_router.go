@@ -1,18 +1,17 @@
 package routers
 
 import (
-	"net/http"
-
 	"github.com/go-chi/chi/v5"
+	"github.com/ihksanghazi/api-library/controllers"
 	"gorm.io/gorm"
 )
 
 func BorrowRouter(db *gorm.DB) *chi.Mux {
 	r := chi.NewRouter()
 
-	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("Borrow Router"))
-	})
+	borrowController := controllers.NewBorrowController()
+
+	r.Get("/", borrowController.GetBorrowsController)
 
 	return r
 }
