@@ -15,8 +15,8 @@ POST http://localhost:3000/api/auth/register
 POST http://localhost:3000/api/auth/login
 
 {
-	"email":"nursandyihksan@gmail.com",
-	"password":"admin123"
+	"email":"azhi@gmail.com",
+	"password":"123"
 }
 
 ### Test Middleware
@@ -79,5 +79,8 @@ PUT http://localhost:3000/api/book/edf6d61e-a875-4f0a-a430-5a73bcdd6707
 DELETE  http://localhost:3000/api/book/edf6d61e-a875-4f0a-a430-5a73bcdd6707
 
 ### Get Book By Id
-GET  http://localhost:3000/api/book/8ddbb9e5-7641-4975-8152-6aaad303e7c0
+GET  http://localhost:3000/api/book/18ebc3d0-399d-4bff-91a4-f20067c48b85
 
+### BorrowBook
+### Must Login
+GET  http://localhost:3000/api/book/borrow/18ebc3d0-399d-4bff-91a4-f20067c48b85
