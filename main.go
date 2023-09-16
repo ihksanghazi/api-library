@@ -29,6 +29,7 @@ func main() {
 	r.Mount("/api/auth", routers.AuthRouter(db))
 	r.Mount("/api/user", routers.UserRouter(db))
 	r.Mount("/api/book", routers.BookRouter(db))
+	r.Mount("/api/borrow", routers.BorrowRouter(db))
 
 	http.ListenAndServe(":3000", r)
 }
