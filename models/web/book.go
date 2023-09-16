@@ -31,6 +31,10 @@ type BooksWebResponse struct {
 	Total           int       `json:"total"`
 }
 
+func (b *BooksWebResponse) TableName() string {
+	return "books"
+}
+
 type BookWebResponse struct {
 	ID              uuid.UUID `json:"id"`
 	Title           string    `json:"title"`

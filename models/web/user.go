@@ -39,6 +39,10 @@ type UsersWebResponse struct {
 	ImageUrl    string    `json:"image_url"`
 }
 
+func (u *UsersWebResponse) TableName() string {
+	return "users"
+}
+
 type UserWebResponse struct {
 	ID          uuid.UUID `json:"id"`
 	Username    string    `json:"username"`
