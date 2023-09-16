@@ -17,6 +17,7 @@ type BookController interface {
 	GetAllBookController(w http.ResponseWriter, r *http.Request)
 	UpdateBookController(w http.ResponseWriter, r *http.Request)
 	DeleteBookController(w http.ResponseWriter, r *http.Request)
+	GetBookByIdController(w http.ResponseWriter, r *http.Request)
 }
 
 type BookControllerImpl struct {
@@ -127,4 +128,10 @@ func (b *BookControllerImpl) DeleteBookController(w http.ResponseWriter, r *http
 	}
 
 	utils.ResponseJSON(w, http.StatusOK, "OK", "Succes Delete Book With Id '"+id+"'")
+}
+
+func (b *BookControllerImpl) GetBookByIdController(w http.ResponseWriter, r *http.Request) {
+	id := chi.URLParam(r, "id")
+
+	utils.ResponseJSON(w, http.StatusOK, "OK", id)
 }
