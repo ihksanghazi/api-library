@@ -16,9 +16,10 @@ func BookRouter(db *gorm.DB) *chi.Mux {
 
 	var ctx context.Context
 	validate := validator.New()
-	var model domain.Book
+	var book domain.Book
+	var borrow domain.Borrowing
 
-	bookService := services.NewBookService(db, ctx, model)
+	bookService := services.NewBookService(db, ctx, book, borrow)
 	bookController := controllers.NewBookController(validate, bookService)
 
 	r.Get("/", bookController.GetAllBookController)

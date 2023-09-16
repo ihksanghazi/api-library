@@ -3,6 +3,7 @@ package controllers
 import (
 	"encoding/json"
 	"net/http"
+	"os"
 	"strconv"
 
 	"github.com/go-chi/chi/v5"
@@ -144,7 +145,27 @@ func (b *BookControllerImpl) GetBookByIdController(w http.ResponseWriter, r *htt
 }
 
 func (b *BookControllerImpl) BorrowBookController(w http.ResponseWriter, r *http.Request) {
-	id := chi.URLParam(r, "id")
+	// get book id
+	bookId := chi.URLParam(r, "id")
 
-	utils.ResponseJSON(w, http.StatusOK, "OK", id)
+	// get refresh token for get user id
+	refreshToken, errCookie := r.Cookie("AccessToken")
+	if errCookie != nil {
+		utils.ResponseError(w, http.StatusUnauthorized, "Unauthorized")
+		return
+	}
+
+	// get user id
+	user, errParsing := utils.ParsingToken(refreshToken.Value, os.Getenv("REFRESH_TOKEN_JWT"))
+	if errParsing != nil {
+		utils.ResponseError(w, http.StatusUnauthorized, "Unauthorized")
+		return
+	}
+
+	if errService := b.service.BorrowBookService(user.ID, bookId); errService != nil {
+		utils.ResponseError(w, http.StatusInternalServerError, errService.Error())
+		return
+	}
+
+	utils.ResponseJSON(w, http.StatusOK, "OK", "Success To Borrow A Book with ID '"+bookId+"'")
 }

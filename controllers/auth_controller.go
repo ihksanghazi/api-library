@@ -82,6 +82,7 @@ func (a *AuthControllerImpl) LoginController(w http.ResponseWriter, r *http.Requ
 		Value:    *refreshToken,
 		SameSite: http.SameSiteNoneMode,
 		Expires:  timeRefreshToken,
+		Path:     "/",
 	}
 	http.SetCookie(w, &cookie)
 
@@ -112,6 +113,7 @@ func (a *AuthControllerImpl) LogoutController(w http.ResponseWriter, r *http.Req
 		SameSite: http.SameSiteNoneMode,
 		HttpOnly: true,
 		MaxAge:   -1,
+		Path:     "/",
 	}
 	http.SetCookie(w, &cookie)
 
