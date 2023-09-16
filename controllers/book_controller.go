@@ -20,6 +20,7 @@ type BookController interface {
 	DeleteBookController(w http.ResponseWriter, r *http.Request)
 	GetBookByIdController(w http.ResponseWriter, r *http.Request)
 	BorrowBookController(w http.ResponseWriter, r *http.Request)
+	ReturnBookController(w http.ResponseWriter, r *http.Request)
 }
 
 type BookControllerImpl struct {
@@ -168,4 +169,10 @@ func (b *BookControllerImpl) BorrowBookController(w http.ResponseWriter, r *http
 	}
 
 	utils.ResponseJSON(w, http.StatusOK, "OK", "Success To Borrow A Book with ID '"+bookId+"'")
+}
+
+func (b *BookControllerImpl) ReturnBookController(w http.ResponseWriter, r *http.Request) {
+	bookId := chi.URLParam(r, "id")
+
+	utils.ResponseJSON(w, http.StatusOK, "ok", bookId)
 }

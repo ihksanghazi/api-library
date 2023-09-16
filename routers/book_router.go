@@ -25,6 +25,7 @@ func BookRouter(db *gorm.DB) *chi.Mux {
 	r.Get("/", bookController.GetAllBookController)
 	r.Get("/{id}", bookController.GetBookByIdController)
 	r.Get("/borrow/{id}", bookController.BorrowBookController)
+	r.Get("/return/{id}", bookController.ReturnBookController)
 	r.Post("/", bookController.CreateBookController)
 	r.Put("/{id}", bookController.UpdateBookController)
 	r.Delete("/{id}", bookController.DeleteBookController)
