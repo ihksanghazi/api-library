@@ -10,9 +10,10 @@ import (
 
 type BookService interface {
 	CreateBookService(req web.CreateBookWebRequest) (result web.CreateBookWebRequest, err error)
-	GetAllBookService(page int, limit int) (result []web.GetAllBooksWebResponse, totalPage int64, err error)
+	GetAllBookService(page int, limit int) (result []web.BooksWebResponse, totalPage int64, err error)
 	UpdateBookService(id string, req web.UpdateBookWebRequest) (result web.UpdateBookWebRequest, err error)
 	DeleteBookService(id string) (err error)
+	GetBookByIdService(id string) (result web.BookWebResponse, err error)
 }
 
 type BookServiceImpl struct {
@@ -47,8 +48,8 @@ func (b *BookServiceImpl) CreateBookService(req web.CreateBookWebRequest) (resul
 	return req, errTransaction
 }
 
-func (b *BookServiceImpl) GetAllBookService(page int, limit int) (result []web.GetAllBooksWebResponse, totalPage int64, err error) {
-	var response []web.GetAllBooksWebResponse
+func (b *BookServiceImpl) GetAllBookService(page int, limit int) (result []web.BooksWebResponse, totalPage int64, err error) {
+	var response []web.BooksWebResponse
 	var Count int64
 	//pagination
 	offset := (page - 1) * limit
@@ -87,4 +88,10 @@ func (b *BookServiceImpl) DeleteBookService(id string) (err error) {
 		return nil
 	})
 	return errTransaction
+}
+
+func (b *BookServiceImpl) GetBookByIdService(id string) (result web.BookWebResponse, err error) {
+	var model web.BookWebResponse
+	Error := b.db.Model(b.model).WithContext(b.ctx).Where("id = ?", id).Preload("Users.Borrow").First(&model).Error
+	return model, Error
 }

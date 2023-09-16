@@ -133,5 +133,11 @@ func (b *BookControllerImpl) DeleteBookController(w http.ResponseWriter, r *http
 func (b *BookControllerImpl) GetBookByIdController(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
 
-	utils.ResponseJSON(w, http.StatusOK, "OK", id)
+	result, err := b.service.GetBookByIdService(id)
+	if err != nil {
+		utils.ResponseError(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	utils.ResponseJSON(w, http.StatusOK, "OK", result)
 }

@@ -8,6 +8,7 @@ import (
 
 type BorrowingWebResponse struct {
 	BookID        uuid.UUID `json:"-"`
+	UserID        uuid.UUID `json:"-"`
 	BorrowingDate time.Time `json:"borrowing_date"`
 	ReturnDate    time.Time `json:"return_date"`
 	Status        string    `json:"status"`
