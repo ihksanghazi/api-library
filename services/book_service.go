@@ -19,6 +19,7 @@ type BookService interface {
 	GetBookByIdService(id string) (result web.BookWebResponse, err error)
 	BorrowBookService(userId string, bookId string) (err error)
 	ReturnBookService(bookId string, userId string) (err error)
+	GetAllExpiredService(page int, limit int) (result []web.BorrowsWebResponse, totalPage int64, err error)
 }
 
 type BookServiceImpl struct {
@@ -152,4 +153,17 @@ func (b *BookServiceImpl) ReturnBookService(bookId string, userId string) (err e
 	})
 
 	return errTransaction
+}
+
+func (b *BookServiceImpl) GetAllExpiredService(page int, limit int) (result []web.BorrowsWebResponse, totalPage int64, err error) {
+	// Get All Borrow
+	var response []web.BorrowsWebResponse
+
+	var Count int64
+	//pagination
+	offset := (page - 1) * limit
+	Error := b.db.Model(b.borrow).WithContext(b.ctx).Preload("User").Preload("Book").Count(&Count).Offset(offset).Limit(limit).Find(&response).Error
+	TotalPage := (Count + int64(limit) - 1) / int64(limit)
+
+	return response, TotalPage, Error
 }
