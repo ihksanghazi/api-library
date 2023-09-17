@@ -195,7 +195,7 @@ func (b *BookControllerImpl) ReturnBookController(w http.ResponseWriter, r *http
 		return
 	}
 
-	utils.ResponseJSON(w, http.StatusOK, "OK", "Success To Borrow A Book with ID '"+bookId+"'")
+	utils.ResponseJSON(w, http.StatusOK, "OK", "Success To Return A Book with ID '"+bookId+"'")
 }
 
 func (b *BookControllerImpl) GetAllExpiredController(w http.ResponseWriter, r *http.Request) {
@@ -222,6 +222,12 @@ func (b *BookControllerImpl) GetAllExpiredController(w http.ResponseWriter, r *h
 
 		totalPage = pageInt
 		totalLimit = limitInt
+	}
+
+	errExpired := b.service.UpdateExpiredService()
+	if errExpired != nil {
+		utils.ResponseError(w, http.StatusInternalServerError, errExpired.Error())
+		return
 	}
 
 	borrows, totalAllPage, errService := b.service.GetAllExpiredService(totalPage, totalLimit)
