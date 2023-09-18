@@ -211,7 +211,7 @@ Contoh Response Body:
 	"total_page": 1,
 	"data": [
 		{
-			"id": "8eb09df1-56da-4927-82df-8d7a4681266b",
+			"id": "<UserId>",
 			"username": "admin",
 			"email": "admin@gmail.com",
 			"address": "",
@@ -233,13 +233,13 @@ Digunakan untuk mendapatkan data pengguna berdasarkan **ID** pengguna yang diten
 #### Endpoint
 
 ```http
-GET http://localhost:3000/api/user/8eb09df1-56da-4927-82df-8d7a4681266b
+GET http://localhost:3000/api/user/<UserId>
 Access-Token: <YourAccessToken>
 ```
 
 #### Url Parameter
 
-- **id** (uuid, required): user id
+- **UserId** (uuid, required): user id
 
 #### Request Headers
 
@@ -257,7 +257,7 @@ Contoh Response Body:
 	"code": 200,
 	"status": "OK",
 	"data": {
-		"id": "8eb09df1-56da-4927-82df-8d7a4681266b",
+		"id": "<UserId>",
 		"username": "admin",
 		"email": "admin@gmail.com",
 		"address": "",
@@ -283,13 +283,13 @@ Digunakan untuk memperbarui data pengguna berdasarkan **ID** pengguna yang diten
 #### Endpoint
 
 ```http
-PUT http://localhost:3000/api/user/8eb09df1-56da-4927-82df-8d7a4681266b
+PUT http://localhost:3000/api/user/<UserId>
 Access-Token: <YourAccessToken>
 ```
 
 #### Url Parameter
 
-- **id** (uuid, required): user id
+- **UserId** (uuid, required): user id
 
 #### Request Headers
 
@@ -340,3 +340,37 @@ Contoh Response Body:
 ```
 
 ##
+
+### Delete User By ID
+
+Digunakan untuk menghapus data pengguna berdasarkan **ID** pengguna yang ditentukan.
+
+#### Endpoint
+
+```http
+DELETE http://localhost:3000/api/user/<UserId>
+Access-Token: <YourAccessToken>
+```
+
+#### Url Parameter
+
+- **UserId** (uuid, required): user id
+
+#### Request Headers
+
+- **Access-Token** (string, required): AccessToken yang diperoleh dari proses otentikasi.
+
+#### Response
+
+- **HTTP Status**: 200 OK
+- **Content-Type**: application/json
+
+Contoh Response Body:
+
+```json
+{
+	"code": 200,
+	"status": "OK",
+	"data": "Success Deleted User With Id '<UserId>'"
+}
+```
