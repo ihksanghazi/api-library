@@ -174,7 +174,9 @@ DELETE http://localhost:3000/api/auth/logout
 
 ##
 
-### Get All Users **Only Admin**
+### Get All Users
+
+**!!!ONLY ADMIN!!!**
 
 Digunakan untuk mendapatkan data pengguna dengan menggunakan parameter **page** dan **limit** untuk mengatur halaman dan batas hasil.
 
@@ -213,5 +215,52 @@ Contoh Response Body:
 	]
 }
 ```
+
+##
+
+### Get User By ID
+
+**ONLY ADMIN**
+
+Digunakan untuk mendapatkan data pengguna berdasarkan ID pengguna yang ditentukan.
+
+#### Endpoint
+
+```bash
+GET http://localhost:3000/api/user/8eb09df1-56da-4927-82df-8d7a4681266b
+```
+
+#### Request Headers
+
+- **Access-Token** (string, required): AccessToken yang diperoleh dari proses otentikasi.
+
+#### Response
+
+- **HTTP Status**: 200 OK
+- **Content-Type**: application/json
+
+Contoh Response Body:
+
+```json
+{
+	"code": 200,
+	"status": "OK",
+	"data": {
+		"id": "8eb09df1-56da-4927-82df-8d7a4681266b",
+		"username": "admin",
+		"email": "admin@gmail.com",
+		"address": "",
+		"phone_number": "",
+		"image_url": "",
+		"created_at": "2023-09-18T20:21:06.783696+07:00",
+		"updated_at": "2023-09-18T22:01:38.383622+07:00",
+		"list_of_books": []
+	}
+}
+```
+
+#### Catatan
+
+- **list_of_books** akan berisi daftar buku yang dipinjam oleh User tersebut.
 
 ##

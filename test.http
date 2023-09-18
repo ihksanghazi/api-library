@@ -34,8 +34,8 @@ Access-Token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiZ
 
 ### Get User By Id
 ### ADMIN
-GET http://localhost:3000/api/user/b1568547-27bc-4d98-a6a6-607a3aad0537
-Access-Token:
+GET http://localhost:3000/api/user/8eb09df1-56da-4927-82df-8d7a4681266b
+Access-Token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiZW1haWwiOiJhZG1pbkBnbWFpbC5jb20iLCJleHAiOjE2OTUwNTAwNTksImp0aSI6IjhlYjA5ZGYxLTU2ZGEtNDkyNy04MmRmLThkN2E0NjgxMjY2YiJ9.gjBcpZ_FL6y4ObFT8oJsjCqetkCjPj1KJf9lb8-jq6I
 
 ### Update User By Id
 ### USER
