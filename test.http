@@ -22,7 +22,6 @@ POST http://localhost:3000/api/auth/login
 ### Get Token
 ### User
 GET http://localhost:3000/api/auth/token
-Access-Token:
 
 ### Logout
 ### User

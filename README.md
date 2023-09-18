@@ -40,10 +40,8 @@ Contoh Request Body:
 
 #### Response
 
-- **HTTP Status**: 200 OK
-- **Content-Type**: application/json
-
-Contoh Response Body:
+**HTTP Status**: 200 OK
+**Content-Type**: application/json
 
 ```json
 {
@@ -81,7 +79,8 @@ POST http://localhost:3000/api/auth/login
 
 - **email** (string, required): Alamat email pengguna.
 - **password** (string, required): Kata sandi pengguna.
-  Contoh Request Body:
+
+Contoh Request Body:
 
 ```json
 {
@@ -92,20 +91,54 @@ POST http://localhost:3000/api/auth/login
 
 #### Response
 
-- **HTTP Status**: 200 OK
-- **Content-Type**: application/json
-- **Set-Cookie**: AccessToken=**YourToken**
-
-Contoh Response Body:
+**HTTP Status**: 200 OK
+**Content-Type**: application/json
+**Set-Cookie**:AccessToken=**YourRefreshToken**
 
 ```json
 {
 	"code": 200,
 	"status": "Your Access Token",
-	"data": "<YourToken>"
+	"data": "<YourAccessToken>"
 }
 ```
 
 #### Catatan
 
-- **Token** yang diatur dalam cookie dan **Token** yang diberikan melalui respons dalam bentuk JSON pada body memiliki nilai yang berbeda.
+- **Token** yang diatur dalam cookie dan **Token** yang diberikan melalui response dalam bentuk JSON pada body memiliki nilai yang berbeda.
+
+### Get Token
+
+Digunakan untuk mendapatkan AccessToken yang telah diatur dalam cookie.
+
+#### Endpoint
+
+```bash
+GET http://localhost:3000/api/auth/token
+```
+
+#### Response
+
+**HTTP Status**: 200 OK
+**Content-Type**: application/json
+
+```json
+{
+	"code": 200,
+	"status": "Your Access Token",
+	"data": "<YourAccessToken>"
+}
+```
+
+#### Catatan
+
+Hanya dapat digunakan setelah pengguna berhasil login. Jika pengguna belum melakukan login, permintaan akan menghasilkan respons berikut:
+
+**HTTP Status**: 401 Unauthorized
+**Content-Type**: application/json
+
+```json
+{
+	"message": "Unauthorized"
+}
+```
