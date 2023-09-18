@@ -636,3 +636,39 @@ Contoh Response Body:
 - **list_of_users** adalah data seluruh users yang meminjam buku tersebut.
 
 ##
+
+### Borrowing Book By ID
+
+Digunakan untuk meminjam buku berdasarkan **ID** buku yang ditentukan.
+
+### Endpoint
+
+```http
+GET  http://localhost:3000/api/book/borrow/<BookId>
+Access-Token: <YourAccessToken>
+```
+
+#### Url Parameter
+
+- **BookId** (uuid, required): book id
+
+#### Request Headers
+
+- **Access-Token** (string, required): AccessToken yang diperoleh dari proses otentikasi.
+
+#### Response
+
+- **HTTP Status**: 200 OK
+- **Content-Type**: application/json
+
+Contoh Response Body:
+
+```json
+{
+	"code": 200,
+	"status": "OK",
+	"data": "Success To Borrow A Book with ID '<BookId>'"
+}
+```
+
+##
