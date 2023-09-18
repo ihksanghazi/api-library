@@ -99,12 +99,12 @@ Access-Token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFkbWluIEtlc
 
 ### BorrowBook
 ### User Must Login
-GET  http://localhost:3000/api/book/borrow/18ebc3d0-399d-4bff-91a4-f20067c48b85
-Access-Token:
+GET  http://localhost:3000/api/book/borrow/d4f79719-e5aa-4f9b-b9eb-67ee328aa6bb
+Access-Token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFkbWluIEtlcmVuIiwiZW1haWwiOiJhZG1pbkBnbWFpbC5jb20iLCJleHAiOjE2OTUwNTg1NDQsImp0aSI6IjhlYjA5ZGYxLTU2ZGEtNDkyNy04MmRmLThkN2E0NjgxMjY2YiJ9.efZOsd3UcmstochKpuO1Km4X4a-ZFeSfzj44La-5wUo
 
 ### Return Book
 ### User Must Login
-GET  http://localhost:3000/api/book/return/18ebc3d0-399d-4bff-91a4-f20067c48b85
+GET  http://localhost:3000/api/book/return/d4f79719-e5aa-4f9b-b9eb-67ee328aa6bb
 Access-Token:
 
 ### Get All Expired
