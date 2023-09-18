@@ -89,5 +89,5 @@ GET  http://localhost:3000/api/book/borrow/18ebc3d0-399d-4bff-91a4-f20067c48b85
 ### Must Login
 GET  http://localhost:3000/api/book/return/18ebc3d0-399d-4bff-91a4-f20067c48b85
 
-### Get All Borrows
-GET  http://localhost:3000/api/borrow?page=1&limit=5
+### Get All Expired
+GET  http://localhost:3000/api/book/expired?page=1&limit=5

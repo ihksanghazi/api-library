@@ -19,6 +19,8 @@ type BookService interface {
 	GetBookByIdService(id string) (result web.BookWebResponse, err error)
 	BorrowBookService(userId string, bookId string) (err error)
 	ReturnBookService(bookId string, userId string) (err error)
+	GetAllExpiredService(page int, limit int) (result []web.BorrowsWebResponse, totalPage int64, err error)
+	UpdateExpiredService() (err error)
 }
 
 type BookServiceImpl struct {
@@ -121,6 +123,11 @@ func (b *BookServiceImpl) BorrowBookService(userId string, bookId string) (err e
 	borrow.Status = "borrowed"
 	// transaction
 	errTransaction := b.db.Transaction(func(tx *gorm.DB) error {
+		if errFind := tx.Model(b.borrow).WithContext(b.ctx).Where("user_id = ? AND book_id = ?", userId, bookId).First(&b.borrow).Error; errFind == nil {
+			return errors.New("you have borrowed this book")
+		} else if errFind != nil && errFind != gorm.ErrRecordNotFound {
+			return errFind
+		}
 		if errSelect := tx.Model(b.book).WithContext(b.ctx).Where("id = ?", bookId).First(&book).Error; errSelect != nil {
 			return errSelect
 		}
@@ -142,11 +149,38 @@ func (b *BookServiceImpl) BorrowBookService(userId string, bookId string) (err e
 func (b *BookServiceImpl) ReturnBookService(bookId string, userId string) (err error) {
 	//transaction
 	errTransaction := b.db.Transaction(func(tx *gorm.DB) error {
-		if errDelete := tx.Model(b.borrow).WithContext(b.ctx).Where("user_id = ?", userId).Delete(&b.borrow).Error; errDelete != nil {
+		if errFind := tx.Model(b.borrow).WithContext(b.ctx).Where("user_id = ? AND book_id = ?", userId, bookId).First(&b.borrow).Error; errFind != nil {
+			return errFind
+		}
+		if errDelete := tx.Model(b.borrow).WithContext(b.ctx).Where("user_id = ? AND book_id = ?", userId, bookId).Delete(&b.borrow).Error; errDelete != nil {
 			return errDelete
 		}
 		if errUpdate := tx.Model(b.book).WithContext(b.ctx).Where("id = ?", bookId).Update("total", gorm.Expr("total + ?", 1)).Error; errUpdate != nil {
 			return errUpdate
+		}
+		return nil
+	})
+
+	return errTransaction
+}
+
+func (b *BookServiceImpl) GetAllExpiredService(page int, limit int) (result []web.BorrowsWebResponse, totalPage int64, err error) {
+	// Get All Borrow
+	var response []web.BorrowsWebResponse
+
+	var Count int64
+	//pagination
+	offset := (page - 1) * limit
+	Error := b.db.Model(b.borrow).WithContext(b.ctx).Where("status = ?", "expired").Preload("User").Preload("Book").Count(&Count).Offset(offset).Limit(limit).Find(&response).Error
+	TotalPage := (Count + int64(limit) - 1) / int64(limit)
+
+	return response, TotalPage, Error
+}
+
+func (b *BookServiceImpl) UpdateExpiredService() (err error) {
+	errTransaction := b.db.Transaction(func(tx *gorm.DB) error {
+		if err := tx.WithContext(b.ctx).Exec("update borrowings set status = 'expired' where age(now(),return_date) > interval '0 days'").Error; err != nil {
+			return err
 		}
 		return nil
 	})
