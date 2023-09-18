@@ -61,7 +61,7 @@ Contoh Request Body:
 
 #### Catatan
 
-- Peran (**role**) pengguna dalam contoh di atas diatur sebagai "user" atau "password". Anda dapat menggantinya sesuai dengan kebutuhan aplikasi Anda.
+- Peran (**role**) pengguna dalam contoh di atas diatur sebagai "user" atau "admin". Anda dapat menggantinya sesuai dengan kebutuhan aplikasi Anda.
 - Kata sandi (**password**) yang digunakan dalam contoh di atas telah di-hash dengan algoritma bcrypt.
 - Beberapa bidang seperti **role**, **address**, **phone_number**, dan **image_url** dapat dikosongkan sesuai dengan kebutuhan aplikasi Anda.
 
@@ -140,5 +140,28 @@ Hanya dapat digunakan setelah pengguna berhasil login. Jika pengguna belum melak
 ```json
 {
 	"message": "Unauthorized"
+}
+```
+
+### Logout User
+
+Digunakan untuk keluar dan menghapus AccessToken dari cookie.
+
+#### Endpoint
+
+```bash
+DELETE http://localhost:3000/api/auth/logout
+```
+
+#### Response
+
+- **HTTP Status**: 200 OK
+- **Content-Type**: application/json
+
+```json
+{
+	"code": 200,
+	"status": "You Have Logged Out",
+	"data": null
 }
 ```

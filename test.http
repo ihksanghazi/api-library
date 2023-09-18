@@ -26,7 +26,6 @@ GET http://localhost:3000/api/auth/token
 ### Logout
 ### User
 DELETE http://localhost:3000/api/auth/logout
-Access-Token:
 
 ### Get All Users
 ### ADMIN
