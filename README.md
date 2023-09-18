@@ -548,3 +548,41 @@ Contoh Response Body:
 ```
 
 ##
+
+### Delete Book By Id
+
+**!!! HANYA ADMIN YANG DAPAT MENGGUNAKAN FITUR INI !!!**
+
+Digunakan untuk menghapus buku berdasarkan **ID** buku yang ditentukan.
+
+#### Endpoint
+
+```http
+DELETE  http://localhost:3000/api/book/<BookId>
+Access-Token: <YourAccessToken>
+```
+
+#### Url Parameter
+
+- **BookId** (uuid, required): book id
+
+#### Request Headers
+
+- **Access-Token** (string, required): AccessToken yang diperoleh dari proses otentikasi.
+
+#### Response
+
+- **HTTP Status**: 200 OK
+- **Content-Type**: application/json
+
+Contoh Response Body:
+
+```json
+{
+	"code": 200,
+	"status": "OK",
+	"data": "Succes Delete Book With Id '<BookId>'"
+}
+```
+
+##

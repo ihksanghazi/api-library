@@ -90,7 +90,7 @@ Access-Token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFkbWluIEtlc
 ### Delete Book By Id
 ### Admin
 DELETE  http://localhost:3000/api/book/edf6d61e-a875-4f0a-a430-5a73bcdd6707
-Access-Token:
+Access-Token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFkbWluIEtlcmVuIiwiZW1haWwiOiJhZG1pbkBnbWFpbC5jb20iLCJleHAiOjE2OTUwNTc1NDYsImp0aSI6IjhlYjA5ZGYxLTU2ZGEtNDkyNy04MmRmLThkN2E0NjgxMjY2YiJ9.DpVKQUmjahbQMwAzKlokHCoqt9B97XZqkPurPxvdnCI
 
 ### Get Book By Id
 ### User
