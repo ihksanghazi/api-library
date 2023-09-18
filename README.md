@@ -6,10 +6,10 @@ Ini adalah sebuah API yang digunakan untuk mengelola berbagai aktivitas terkait 
 
 ## Table Of Contents
 
-- [Description][##Description]
-- [Table Of Contents][##Table-Of-Contents]
+- [Description][## Description]
+- [Table Of Contents][## Table-Of-Contents]
 - [Feature][##Feature]
-- [MIT License][##MIT-License]
+- [MIT License][## MIT-License]
 
 ## Feature
 
