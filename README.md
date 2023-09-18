@@ -42,7 +42,8 @@ Contoh Request Body:
 
 - **HTTP Status**: 200 OK
 - **Content-Type**: application/json
-  Contoh Response Body:
+
+Contoh Response Body:
 
 ```json
 {
@@ -94,15 +95,16 @@ POST http://localhost:3000/api/auth/login
 - **HTTP Status**: 200 OK
 - **Content-Type**: application/json
 - **Set-Cookie**: AccessToken=**YourToken**
-  Contoh Response Body:
 
-  ```json
-  {
-  	"code": 200,
-  	"status": "Your Access Token",
-  	"data": "<YourToken>"
-  }
-  ```
+Contoh Response Body:
+
+```json
+{
+	"code": 200,
+	"status": "Your Access Token",
+	"data": "<YourToken>"
+}
+```
 
 #### Catatan
 
