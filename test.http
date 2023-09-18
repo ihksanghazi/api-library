@@ -72,7 +72,7 @@ Access-Token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFkbWluIEtlc
 ### Get All Books
 ### User
 GET http://localhost:3000/api/book?page=1&limit=3
-Access-Token:
+Access-Token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFkbWluIEtlcmVuIiwiZW1haWwiOiJhZG1pbkBnbWFpbC5jb20iLCJleHAiOjE2OTUwNTU2NDUsImp0aSI6IjhlYjA5ZGYxLTU2ZGEtNDkyNy04MmRmLThkN2E0NjgxMjY2YiJ9.zpQJWuQ_VfjuA0Tj5Lv4mGVucW6ueA_CAtVNnCdV_8E
 
 ### Update Book By Id
 ### Admin

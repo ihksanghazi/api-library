@@ -436,3 +436,49 @@ Contoh Response Body:
 ```
 
 ##
+
+### Get All Books
+
+Digunakan untuk mendapatkan data buku dengan menggunakan parameter **page** dan **limit** untuk mengatur halaman dan batas hasil.
+
+#### Endpoint
+
+```http
+GET http://localhost:3000/api/book?page=1&limit=3
+Access-Token: <YourAccessToken>
+```
+
+#### Query Parameter
+
+- **page** (number,optional): Halaman ke berapa
+- **limit** (number,optional): Jumlah data perhalaman
+
+#### Request Headers
+
+- **Access-Token** (string, required): AccessToken yang diperoleh dari proses otentikasi.
+
+#### Response
+
+- **HTTP Status**: 200 OK
+- **Content-Type**: application/json
+
+Contoh Response Body:
+
+```json
+{
+	"code": 200,
+	"status": "OK",
+	"current_page": 1,
+	"total_page": 1,
+	"data": [
+		{
+			"id": "<BookId>",
+			"title": "Dasar Pemrograman",
+			"author": "Admin Keren",
+			"publication_year": 2020,
+			"image_url": "",
+			"total": 50
+		}
+	]
+}
+```
