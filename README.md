@@ -586,3 +586,53 @@ Contoh Response Body:
 ```
 
 ##
+
+### Get Book By ID
+
+Digunakan untuk mendapatkan detail buku berdasarkan **ID** buku yang ditentukan.
+
+#### Endpoint
+
+```http
+GET  http://localhost:3000/api/book/<BookId>
+Access-Token: <YourAccessToken>
+```
+
+#### Url Parameter
+
+- **BookId** (uuid, required): book id
+
+#### Request Headers
+
+- **Access-Token** (string, required): AccessToken yang diperoleh dari proses otentikasi.
+
+#### Response
+
+- **HTTP Status**: 200 OK
+- **Content-Type**: application/json
+
+Contoh Response Body:
+
+```json
+{
+	"code": 200,
+	"status": "OK",
+	"data": {
+		"id": "<BookId>",
+		"title": "Praktek Pemrograman",
+		"author": "Admin Keren",
+		"publicaion_year": 2020,
+		"image_url": "",
+		"total": 50,
+		"created_at": "2023-09-18T23:38:04.845859+07:00",
+		"updated_at": "2023-09-18T23:57:05.956312+07:00",
+		"list_of_users": []
+	}
+}
+```
+
+#### Catatan
+
+- **list_of_users** adalah data seluruh users yang meminjam buku tersebut.
+
+##
