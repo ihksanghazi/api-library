@@ -30,7 +30,7 @@ DELETE http://localhost:3000/api/auth/logout
 ### Get All Users
 ### ADMIN
 GET http://localhost:3000/api/user?page=1&limit=20
-Access-Token:
+Access-Token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiZW1haWwiOiJhZG1pbkBnbWFpbC5jb20iLCJleHAiOjE2OTUwNDk0MjAsImp0aSI6IjhlYjA5ZGYxLTU2ZGEtNDkyNy04MmRmLThkN2E0NjgxMjY2YiJ9.Ct7QY6MWH_3YJq-yXv40JGoZVRuD7vWXdANOC-Tob_E
 
 ### Get User By Id
 ### ADMIN

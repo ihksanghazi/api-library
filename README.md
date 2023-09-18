@@ -65,6 +65,8 @@ Contoh Request Body:
 - Kata sandi (**password**) yang digunakan dalam contoh di atas telah di-hash dengan algoritma bcrypt.
 - Beberapa bidang seperti **role**, **address**, **phone_number**, dan **image_url** dapat dikosongkan sesuai dengan kebutuhan aplikasi Anda.
 
+##
+
 ### Login User
 
 Digunakan untuk mengotentikasi pengguna dan menghasilkan AccessToken.
@@ -107,6 +109,8 @@ Contoh Request Body:
 
 - **Token** yang diatur dalam cookie dan **Token** yang diberikan melalui response dalam bentuk JSON pada body memiliki nilai yang berbeda.
 
+##
+
 ### Get Token
 
 Digunakan untuk mendapatkan AccessToken yang telah diatur dalam cookie.
@@ -143,6 +147,8 @@ Hanya dapat digunakan setelah pengguna berhasil login. Jika pengguna belum melak
 }
 ```
 
+##
+
 ### Logout User
 
 Digunakan untuk keluar dan menghapus AccessToken dari cookie.
@@ -165,3 +171,47 @@ DELETE http://localhost:3000/api/auth/logout
 	"data": null
 }
 ```
+
+##
+
+### Get All Users **Only Admin**
+
+Digunakan untuk mendapatkan data pengguna dengan menggunakan parameter **page** dan **limit** untuk mengatur halaman dan batas hasil.
+
+#### Endpoint
+
+```bash
+GET http://localhost:3000/api/user?page=1&limit=20
+```
+
+#### Request Headers
+
+- **Access-Token** (string, required): AccessToken yang diperoleh dari proses otentikasi.
+
+#### Response
+
+- **HTTP Status**: 200 OK
+- **Content-Type**: application/json
+
+Contoh Response Body:
+
+```json
+{
+	"code": 200,
+	"status": "OK",
+	"current_page": 1,
+	"total_page": 1,
+	"data": [
+		{
+			"id": "8eb09df1-56da-4927-82df-8d7a4681266b",
+			"username": "admin",
+			"email": "admin@gmail.com",
+			"address": "",
+			"phone_number": "",
+			"image_url": ""
+		}
+	]
+}
+```
+
+##
