@@ -123,6 +123,11 @@ func (b *BookServiceImpl) BorrowBookService(userId string, bookId string) (err e
 	borrow.Status = "borrowed"
 	// transaction
 	errTransaction := b.db.Transaction(func(tx *gorm.DB) error {
+		if errFind := tx.Model(b.borrow).WithContext(b.ctx).Where("user_id = ? AND book_id = ?", userId, bookId).First(&b.borrow).Error; errFind == nil {
+			return errors.New("you have borrowed this book")
+		} else if errFind != nil && errFind != gorm.ErrRecordNotFound {
+			return errFind
+		}
 		if errSelect := tx.Model(b.book).WithContext(b.ctx).Where("id = ?", bookId).First(&book).Error; errSelect != nil {
 			return errSelect
 		}
@@ -143,12 +148,11 @@ func (b *BookServiceImpl) BorrowBookService(userId string, bookId string) (err e
 
 func (b *BookServiceImpl) ReturnBookService(bookId string, userId string) (err error) {
 	//transaction
-	var borrowing domain.Borrowing
 	errTransaction := b.db.Transaction(func(tx *gorm.DB) error {
-		if errFind := tx.Model(b.borrow).WithContext(b.ctx).Where("user_id = ? AND book_id = ?", userId, bookId).First(&borrowing).Error; errFind != nil {
+		if errFind := tx.Model(b.borrow).WithContext(b.ctx).Where("user_id = ? AND book_id = ?", userId, bookId).First(&b.borrow).Error; errFind != nil {
 			return errFind
 		}
-		if errDelete := tx.Model(b.borrow).WithContext(b.ctx).Where("user_id = ? AND book_id = ?", userId, bookId).Delete(&borrowing).Error; errDelete != nil {
+		if errDelete := tx.Model(b.borrow).WithContext(b.ctx).Where("user_id = ? AND book_id = ?", userId, bookId).Delete(&b.borrow).Error; errDelete != nil {
 			return errDelete
 		}
 		if errUpdate := tx.Model(b.book).WithContext(b.ctx).Where("id = ?", bookId).Update("total", gorm.Expr("total + ?", 1)).Error; errUpdate != nil {
