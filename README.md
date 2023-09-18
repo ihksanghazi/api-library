@@ -482,3 +482,69 @@ Contoh Response Body:
 	]
 }
 ```
+
+##
+
+### Update Book By Id
+
+**!!! HANYA ADMIN YANG DAPAT MENGGUNAKAN FITUR INI !!!**
+
+Digunakan untuk memperbarui data buku berdasarkan **ID** buku yang ditentukan.
+
+#### Endpoint
+
+```http
+PUT http://localhost:3000/api/book/<BookId>
+Access-Token: <YourAccessToken>
+```
+
+#### Url Parameter
+
+- **BookId** (uuid, required): book id
+
+#### Request Headers
+
+- **Access-Token** (string, required): AccessToken yang diperoleh dari proses otentikasi.
+
+#### Request Body
+
+- **title** (string, optional): Judul buku yang baru.
+- **author** (string, optional): Penulis buku yang baru.
+- **publication_year** (integer, optional): Tahun publikasi buku yang baru.
+- **image_url** (string, optional): URL gambar sampul buku yang baru.
+- **total** (integer, optional): Jumlah total salinan buku yang baru.
+
+Contoh Request Body:
+
+```json
+{
+	"title": "Praktek Pemrograman",
+	"author": "",
+	"publication_year": 0,
+	"image_url": "",
+	"total": 0
+}
+```
+
+#### Response
+
+- **HTTP Status**: 200 OK
+- **Content-Type**: application/json
+
+Contoh Response Body:
+
+```json
+{
+	"code": 200,
+	"status": "OK",
+	"data": {
+		"title": "Praktek Pemrograman",
+		"author": "",
+		"publicaion_year": 0,
+		"image_url": "",
+		"total": 0
+	}
+}
+```
+
+##
