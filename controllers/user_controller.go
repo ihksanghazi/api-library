@@ -127,5 +127,15 @@ func (u *UserControllerImpl) DeleteUserController(w http.ResponseWriter, r *http
 		return
 	}
 
+	// delete cookie
+	cookie := http.Cookie{
+		Name:     "AccessToken",
+		SameSite: http.SameSiteNoneMode,
+		HttpOnly: true,
+		MaxAge:   -1,
+		Path:     "/",
+	}
+	http.SetCookie(w, &cookie)
+
 	utils.ResponseJSON(w, http.StatusOK, "OK", "Success Deleted User With Id '"+id+"'")
 }

@@ -19,24 +19,30 @@ POST http://localhost:3000/api/auth/login
 	"password":"123"
 }
 
-### Test Middleware
-GET http://localhost:3000/api/auth/test
-Access-Token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJpemt5IiwiZW1haWwiOiJyaXpreUBnbWFpbC5jb20iLCJleHAiOjE2OTQ3MTgzMDksImp0aSI6IjUwMzgwOTdjLTFhZWEtNGZhNi04NTM0LWI2MGFlYWMyZWY0YiJ9.QP371nP_Zxn4hZ3NY82dC_pefSV6mSh9rYkK109046Q
-
 ### Get Token
+### User
 GET http://localhost:3000/api/auth/token
+Access-Token:
 
 ### Logout
+### User
 DELETE http://localhost:3000/api/auth/logout
+Access-Token:
 
 ### Get All Users
+### ADMIN
 GET http://localhost:3000/api/user?page=1&limit=20
+Access-Token:
 
 ### Get User By Id
+### ADMIN
 GET http://localhost:3000/api/user/b1568547-27bc-4d98-a6a6-607a3aad0537
+Access-Token:
 
 ### Update User By Id
+### USER
 PUT http://localhost:3000/api/user/a94ba261-f835-47ba-8f11-8473a67493ce
+Access-Token:
 
 {
   "username":"Andri Ramdani",
@@ -48,10 +54,14 @@ PUT http://localhost:3000/api/user/a94ba261-f835-47ba-8f11-8473a67493ce
 }
 
 ### Delete User By Id
+### USER
 DELETE http://localhost:3000/api/user/faa2c298-111e-43c0-9b9c-c4559011fb82
+Access-Token:
 
 ### Create Book
+### Admin
 POST http://localhost:3000/api/book
+Access-Token:
 
 {
 	"title":"Cita Cita Ku Di NASA",
@@ -62,10 +72,14 @@ POST http://localhost:3000/api/book
 }
 
 ### Get All Books
+### User
 GET http://localhost:3000/api/book?page=1&limit=3
+Access-Token:
 
 ### Update Book By Id
+### Admin
 PUT http://localhost:3000/api/book/edf6d61e-a875-4f0a-a430-5a73bcdd6707
+Access-Token:
 
 {
 	"title":"Mendaki Gunung Rinjani",
@@ -76,18 +90,26 @@ PUT http://localhost:3000/api/book/edf6d61e-a875-4f0a-a430-5a73bcdd6707
 }
 
 ### Delete Book By Id
+### Admin
 DELETE  http://localhost:3000/api/book/edf6d61e-a875-4f0a-a430-5a73bcdd6707
+Access-Token:
 
 ### Get Book By Id
+### User
 GET  http://localhost:3000/api/book/18ebc3d0-399d-4bff-91a4-f20067c48b85
+Access-Token:
 
 ### BorrowBook
-### Must Login
+### User Must Login
 GET  http://localhost:3000/api/book/borrow/18ebc3d0-399d-4bff-91a4-f20067c48b85
+Access-Token:
 
 ### Return Book
-### Must Login
+### User Must Login
 GET  http://localhost:3000/api/book/return/18ebc3d0-399d-4bff-91a4-f20067c48b85
+Access-Token:
 
 ### Get All Expired
+### Admin
 GET  http://localhost:3000/api/book/expired?page=1&limit=5
+Access-Token:

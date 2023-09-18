@@ -2,7 +2,6 @@ package routers
 
 import (
 	"context"
-	"net/http"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-playground/validator/v10"
@@ -24,19 +23,17 @@ func AuthRouter(db *gorm.DB) *chi.Mux {
 
 	middleware := middleware.NewMiddleware(ctx, db, model)
 
+	// user
 	r.Group(func(r chi.Router) {
 		r.Use(middleware.ValidToken)
-		r.Use(middleware.IsAdmin)
-		r.Get("/test", func(w http.ResponseWriter, r *http.Request) {
-			w.Write([]byte("Berhasil Access"))
-		})
+		r.Get("/token", authController.GetTokenController)
+		r.Delete("/logout", authController.LogoutController)
 	})
 
+	// guest
 	r.Group(func(r chi.Router) {
 		r.Post("/register", authController.RegisterController)
 		r.Post("/login", authController.LoginController)
-		r.Get("/token", authController.GetTokenController)
-		r.Delete("/logout", authController.LogoutController)
 	})
 
 	return r
