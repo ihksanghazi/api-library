@@ -93,7 +93,7 @@ POST http://localhost:3000/api/auth/login
 
 - **HTTP Status**: 200 OK
 - **Content-Type**: application/json
-- **Set-Cookie**: AccessToken=<YourToken>
+- **Set-Cookie**: AccessToken=**YourToken**
   Contoh Response Body:
 
   ```json
