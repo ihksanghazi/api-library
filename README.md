@@ -10,7 +10,7 @@ digunakan untuk mendaftarkan pengguna baru.
 
 #### Endpoint
 
-```bash
+```http
 POST http://localhost:3000/api/auth/register
 ```
 
@@ -73,7 +73,7 @@ Digunakan untuk mengotentikasi pengguna dan menghasilkan AccessToken.
 
 #### Endpoint
 
-```bash
+```http
 POST http://localhost:3000/api/auth/login
 ```
 
@@ -117,7 +117,7 @@ Digunakan untuk mendapatkan AccessToken yang telah diatur dalam cookie.
 
 #### Endpoint
 
-```bash
+```http
 GET http://localhost:3000/api/auth/token
 ```
 
@@ -155,7 +155,7 @@ Digunakan untuk keluar dan menghapus AccessToken dari cookie.
 
 #### Endpoint
 
-```bash
+```http
 DELETE http://localhost:3000/api/auth/logout
 ```
 
@@ -176,15 +176,21 @@ DELETE http://localhost:3000/api/auth/logout
 
 ### Get All Users
 
-**!!!ONLY ADMIN!!!**
+**!!! HANYA ADMIN YANG DAPAT MENGGUNAKAN FITUR INI !!!**
 
 Digunakan untuk mendapatkan data pengguna dengan menggunakan parameter **page** dan **limit** untuk mengatur halaman dan batas hasil.
 
 #### Endpoint
 
-```bash
+```http
 GET http://localhost:3000/api/user?page=1&limit=20
+Access-Token: <YourAccessToken>
 ```
+
+#### Query Parameter
+
+- **page** (number,optional): Halaman ke berapa
+- **limit** (number,optional): Jumlah data perhalaman
 
 #### Request Headers
 
@@ -220,15 +226,20 @@ Contoh Response Body:
 
 ### Get User By ID
 
-**ONLY ADMIN**
+**!!! HANYA ADMIN YANG DAPAT MENGGUNAKAN FITUR INI !!!**
 
-Digunakan untuk mendapatkan data pengguna berdasarkan ID pengguna yang ditentukan.
+Digunakan untuk mendapatkan data pengguna berdasarkan **ID** pengguna yang ditentukan.
 
 #### Endpoint
 
-```bash
+```http
 GET http://localhost:3000/api/user/8eb09df1-56da-4927-82df-8d7a4681266b
+Access-Token: <YourAccessToken>
 ```
+
+#### Url Parameter
+
+- **id** (uuid, required): user id
 
 #### Request Headers
 
@@ -262,5 +273,70 @@ Contoh Response Body:
 #### Catatan
 
 - **list_of_books** akan berisi daftar buku yang dipinjam oleh User tersebut.
+
+##
+
+### Update User By ID
+
+Digunakan untuk memperbarui data pengguna berdasarkan **ID** pengguna yang ditentukan.
+
+#### Endpoint
+
+```http
+PUT http://localhost:3000/api/user/8eb09df1-56da-4927-82df-8d7a4681266b
+Access-Token: <YourAccessToken>
+```
+
+#### Url Parameter
+
+- **id** (uuid, required): user id
+
+#### Request Headers
+
+- **Access-Token** (string, required): AccessToken yang diperoleh dari proses otentikasi.
+
+#### Request Body
+
+- **username** (string, optional): Nama pengguna baru.
+- **email** (string, optional): Alamat email pengguna baru.
+- **password** (string, optional): Kata sandi pengguna baru.
+- **address** (string, optional): Alamat pengguna baru.
+- **phone_number** (string, optional): Nomor telepon pengguna baru.
+- **image_url** (string, optional): URL gambar profil pengguna baru.
+
+Contoh Request Body:
+
+```json
+{
+	"username": "Admin Keren",
+	"email": "",
+	"password": "",
+	"address": "",
+	"phone_number": "",
+	"image_url": ""
+}
+```
+
+#### Response
+
+- **HTTP Status**: 200 OK
+- **Content-Type**: application/json
+
+Contoh Response Body:
+
+```json
+{
+	"code": 200,
+	"status": "OK",
+	"data": {
+		"username": "Admin Keren",
+		"email": "",
+		"password": "",
+		"address": "",
+		"phone_number": "",
+		"image_url": ""
+	}
+}
+```
 
 ##
