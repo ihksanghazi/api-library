@@ -672,3 +672,40 @@ Contoh Response Body:
 ```
 
 ##
+
+### Return Book By ID
+
+Digunakan untuk mengembalikan buku berdasarkan **ID** buku yang ditentukan.
+
+#### Endpoint
+
+```http
+GET  http://localhost:3000/api/book/return/<BookId>
+Access-Token: <YourAccessToken>
+
+```
+
+#### Url Parameter
+
+- **BookId** (uuid, required): book id
+
+### Request Headers
+
+- **Access-Token** (string, required): AccessToken yang diperoleh dari proses otentikasi.
+
+#### Response
+
+- **HTTP Status**: 200 OK
+- **Content-Type**: application/json
+
+Contoh Response Body:
+
+```json
+{
+	"code": 200,
+	"status": "OK",
+	"data": "Success To Return A Book with ID 'd4f79719-e5aa-4f9b-b9eb-67ee328aa6bb'"
+}
+```
+
+##
