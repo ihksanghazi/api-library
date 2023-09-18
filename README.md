@@ -65,3 +65,45 @@ Contoh Request Body:
 - Peran (**role**) pengguna dalam contoh di atas diatur sebagai "user" atau "password". Anda dapat menggantinya sesuai dengan kebutuhan aplikasi Anda.
 - Kata sandi (**password**) yang digunakan dalam contoh di atas telah di-hash dengan algoritma bcrypt.
 - Beberapa bidang seperti **role**, **address**, **phone_number**, dan **image_url** dapat dikosongkan sesuai dengan kebutuhan aplikasi Anda.
+
+### Login User
+
+Digunakan untuk mengotentikasi pengguna dan menghasilkan AccessToken.
+
+#### Endpoint
+
+```bash
+POST http://localhost:3000/api/auth/login
+```
+
+#### Request Body
+
+- **email** (string, required): Alamat email pengguna.
+- **password** (string, required): Kata sandi pengguna.
+  Contoh Request Body:
+
+```json
+{
+	"email": "admin@gmail.com",
+	"password": "admin123"
+}
+```
+
+#### Response
+
+- **HTTP Status**: 200 OK
+- **Content-Type**: application/json
+- **Set-Cookie**: AccessToken=<YourToken>
+  Contoh Response Body:
+
+  ```json
+  {
+  	"code": 200,
+  	"status": "Your Access Token",
+  	"data": "<YourToken>"
+  }
+  ```
+
+#### Catatan
+
+- **Token** yang diatur dalam cookie dan **Token** yang diberikan melalui respons dalam bentuk JSON pada body memiliki nilai yang berbeda.

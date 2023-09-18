@@ -15,8 +15,8 @@ POST http://localhost:3000/api/auth/register
 POST http://localhost:3000/api/auth/login
 
 {
-	"email":"andri@gmail.com",
-	"password":"123"
+	"email":"admin@gmail.com",
+	"password":"admin123"
 }
 
 ### Get Token
