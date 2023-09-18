@@ -374,3 +374,65 @@ Contoh Response Body:
 	"data": "Success Deleted User With Id '<UserId>'"
 }
 ```
+
+##
+
+### Create New Book
+
+**!!! HANYA ADMIN YANG DAPAT MENGGUNAKAN FITUR INI !!!**
+
+Digunakan untuk menambahkan buku baru ke dalam sistem.
+
+#### Endpoint
+
+```http
+POST http://localhost:3000/api/book
+Access-Token: <YourAccessToken>
+```
+
+#### Request Headers
+
+- **Access-Token** (string, required): AccessToken yang diperoleh dari proses otentikasi.
+
+#### Request Body
+
+- **title** (string, required): Judul buku baru.
+- **author** (string, required): Penulis buku baru.
+- **publication_year** (integer, required): Tahun publikasi buku baru.
+- **image_url** (string, optional): URL gambar sampul buku.
+- **total** (integer, required): Jumlah total salinan buku yang tersedia.
+
+Contoh Request Body:
+
+```json
+{
+	"title": "Dasar Pemrograman",
+	"author": "Admin Keren",
+	"publication_year": 2020,
+	"image_url": "",
+	"total": 50
+}
+```
+
+#### Response
+
+- **HTTP Status**: 200 OK
+- **Content-Type**: application/json
+
+Contoh Response Body:
+
+```json
+{
+	"code": 200,
+	"status": "OK",
+	"data": {
+		"title": "Dasar Pemrograman",
+		"author": "Admin Keren",
+		"publication_year": 2020,
+		"image_url": "",
+		"total": 50
+	}
+}
+```
+
+##
