@@ -40,8 +40,8 @@ Contoh Request Body:
 
 #### Response
 
-**HTTP Status**: 200 OK
-**Content-Type**: application/json
+- **HTTP Status**: 200 OK
+- **Content-Type**: application/json
 
 ```json
 {
@@ -91,9 +91,9 @@ Contoh Request Body:
 
 #### Response
 
-**HTTP Status**: 200 OK
-**Content-Type**: application/json
-**Set-Cookie**:AccessToken=**YourRefreshToken**
+- **HTTP Status**: 200 OK
+- **Content-Type**: application/json
+- **Set-Cookie**:AccessToken=**YourRefreshToken**
 
 ```json
 {
@@ -119,8 +119,8 @@ GET http://localhost:3000/api/auth/token
 
 #### Response
 
-**HTTP Status**: 200 OK
-**Content-Type**: application/json
+- **HTTP Status**: 200 OK
+- **Content-Type**: application/json
 
 ```json
 {
@@ -134,8 +134,8 @@ GET http://localhost:3000/api/auth/token
 
 Hanya dapat digunakan setelah pengguna berhasil login. Jika pengguna belum melakukan login, permintaan akan menghasilkan respons berikut:
 
-**HTTP Status**: 401 Unauthorized
-**Content-Type**: application/json
+- **HTTP Status**: 401 Unauthorized
+- **Content-Type**: application/json
 
 ```json
 {
