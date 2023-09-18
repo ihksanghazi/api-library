@@ -4,13 +4,6 @@
 
 Ini adalah sebuah API yang digunakan untuk mengelola berbagai aktivitas terkait perpustakaan, termasuk peminjaman dan pengembalian buku, dan lain sebagainya.
 
-## Table Of Contents
-
-- [Description][## Description]
-- [Table Of Contents][## Table-Of-Contents]
-- [Feature][##Feature]
-- [MIT License][## MIT-License]
-
 ## Feature
 
 ### Register User
