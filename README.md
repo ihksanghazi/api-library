@@ -187,10 +187,10 @@ GET http://localhost:3000/api/user?page=1&limit=20
 Access-Token: <YourAccessToken>
 ```
 
-#### Query Parameter
+#### Query Parameters
 
-- **page** (number,optional): Halaman ke berapa
-- **limit** (number,optional): Jumlah data perhalaman
+- **page** (integer, optional): Nomor halaman yang diinginkan (default: 1).
+- **limit** (integer, optional): Jumlah maksimal entri per halaman (default: 5).
 
 #### Request Headers
 
@@ -265,7 +265,20 @@ Contoh Response Body:
 		"image_url": "",
 		"created_at": "2023-09-18T20:21:06.783696+07:00",
 		"updated_at": "2023-09-18T22:01:38.383622+07:00",
-		"list_of_books": []
+		"list_of_books": [
+			{
+				"id": "d4f79719-e5aa-4f9b-b9eb-67ee328aa6bb",
+				"title": "Praktek Pemrograman",
+				"author": "Admin Keren",
+				"publication_year": 2020,
+				"image_url": "",
+				"borrowing_status": {
+					"borrowing_date": "2023-09-19T00:52:10.019807+07:00",
+					"return_date": "2023-09-26T00:52:10.019807+07:00",
+					"status": "borrowed"
+				}
+			}
+		]
 	}
 }
 ```
@@ -448,10 +461,10 @@ GET http://localhost:3000/api/book?page=1&limit=3
 Access-Token: <YourAccessToken>
 ```
 
-#### Query Parameter
+#### Query Parameters
 
-- **page** (number,optional): Halaman ke berapa
-- **limit** (number,optional): Jumlah data perhalaman
+- **page** (integer, optional): Nomor halaman yang diinginkan (default: 1).
+- **limit** (integer, optional): Jumlah maksimal entri per halaman (default: 5).
 
 #### Request Headers
 
@@ -626,7 +639,21 @@ Contoh Response Body:
 		"total": 50,
 		"created_at": "2023-09-18T23:38:04.845859+07:00",
 		"updated_at": "2023-09-18T23:57:05.956312+07:00",
-		"list_of_users": []
+		"list_of_users": [
+			{
+				"id": "8eb09df1-56da-4927-82df-8d7a4681266b",
+				"username": "Admin Keren",
+				"email": "admin@gmail.com",
+				"address": "",
+				"phone_number": "",
+				"image_url": "",
+				"borrowing_status": {
+					"borrowing_date": "2023-09-19T00:52:10.019807+07:00",
+					"return_date": "2023-09-26T00:52:10.019807+07:00",
+					"status": "borrowed"
+				}
+			}
+		]
 	}
 }
 ```
@@ -689,7 +716,7 @@ Access-Token: <YourAccessToken>
 
 - **BookId** (uuid, required): book id
 
-### Request Headers
+#### Request Headers
 
 - **Access-Token** (string, required): AccessToken yang diperoleh dari proses otentikasi.
 
@@ -704,7 +731,70 @@ Contoh Response Body:
 {
 	"code": 200,
 	"status": "OK",
-	"data": "Success To Return A Book with ID 'd4f79719-e5aa-4f9b-b9eb-67ee328aa6bb'"
+	"data": "Success To Return A Book with ID '<BookId>'"
+}
+```
+
+##
+
+### Get All Expired Books
+
+**!!! HANYA ADMIN YANG DAPAT MENGGUNAKAN FITUR INI !!!**
+
+Digunakan untuk mendapatkan daftar buku yang telah kedaluwarsa.
+
+#### Endpoint
+
+```http
+GET  http://localhost:3000/api/book/expired?page=1&limit=5
+Access-Token: <YourAccessToken>
+```
+
+#### Query Parameters
+
+- **page** (integer, optional): Nomor halaman yang diinginkan (default: 1).
+- **limit** (integer, optional): Jumlah maksimal entri per halaman (default: 5).
+
+#### Request Headers
+
+- **Access-Token** (string, required): AccessToken yang diperoleh dari proses otentikasi.
+
+#### Response
+
+- **HTTP Status**: 200 OK
+- **Content-Type**: application/json
+
+Contoh Response Body:
+
+```json
+{
+	"code": 200,
+	"status": "OK",
+	"current_page": 1,
+	"total_page": 1,
+	"data": [
+		{
+			"user": {
+				"id": "<UserId>",
+				"username": "Admin Keren",
+				"email": "admin@gmail.com",
+				"address": "",
+				"phone_number": "",
+				"image_url": ""
+			},
+			"book": {
+				"id": "<BookId>",
+				"title": "Praktek Pemrograman",
+				"author": "Admin Keren",
+				"publication_year": 2020,
+				"image_url": "",
+				"total": 49
+			},
+			"borrowing_date": "2023-09-19T00:52:10.019807+07:00",
+			"return_date": "2023-09-19T00:56:59.627946+07:00",
+			"status": "expired"
+		}
+	]
 }
 ```
 

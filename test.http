@@ -35,7 +35,7 @@ Access-Token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiZ
 ### Get User By Id
 ### ADMIN
 GET http://localhost:3000/api/user/8eb09df1-56da-4927-82df-8d7a4681266b
-Access-Token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiZW1haWwiOiJhZG1pbkBnbWFpbC5jb20iLCJleHAiOjE2OTUwNTAwNTksImp0aSI6IjhlYjA5ZGYxLTU2ZGEtNDkyNy04MmRmLThkN2E0NjgxMjY2YiJ9.gjBcpZ_FL6y4ObFT8oJsjCqetkCjPj1KJf9lb8-jq6I
+Access-Token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFkbWluIEtlcmVuIiwiZW1haWwiOiJhZG1pbkBnbWFpbC5jb20iLCJleHAiOjE2OTUwNTk1NzIsImp0aSI6IjhlYjA5ZGYxLTU2ZGEtNDkyNy04MmRmLThkN2E0NjgxMjY2YiJ9.At1EvkTrzNRwcBARjOvIEKqi2A5mlWLqBSE4ierKrbQ
 
 ### Update User By Id
 ### USER
@@ -95,12 +95,12 @@ Access-Token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFkbWluIEtlc
 ### Get Book By Id
 ### User
 GET  http://localhost:3000/api/book/d4f79719-e5aa-4f9b-b9eb-67ee328aa6bb
-Access-Token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFkbWluIEtlcmVuIiwiZW1haWwiOiJhZG1pbkBnbWFpbC5jb20iLCJleHAiOjE2OTUwNTc5OTIsImp0aSI6IjhlYjA5ZGYxLTU2ZGEtNDkyNy04MmRmLThkN2E0NjgxMjY2YiJ9.zKyKQMOKrlZGrVASNoPZeUeeX-G917mkmkHj0ZZsxf8
+Access-Token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFkbWluIEtlcmVuIiwiZW1haWwiOiJhZG1pbkBnbWFpbC5jb20iLCJleHAiOjE2OTUwNTk2OTUsImp0aSI6IjhlYjA5ZGYxLTU2ZGEtNDkyNy04MmRmLThkN2E0NjgxMjY2YiJ9.mESaOpyvnRUImUi0NOjudFGo17DlGdYify1B2Op0Rhc
 
 ### BorrowBook
 ### User Must Login
 GET  http://localhost:3000/api/book/borrow/d4f79719-e5aa-4f9b-b9eb-67ee328aa6bb
-Access-Token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFkbWluIEtlcmVuIiwiZW1haWwiOiJhZG1pbkBnbWFpbC5jb20iLCJleHAiOjE2OTUwNTg1NDQsImp0aSI6IjhlYjA5ZGYxLTU2ZGEtNDkyNy04MmRmLThkN2E0NjgxMjY2YiJ9.efZOsd3UcmstochKpuO1Km4X4a-ZFeSfzj44La-5wUo
+Access-Token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFkbWluIEtlcmVuIiwiZW1haWwiOiJhZG1pbkBnbWFpbC5jb20iLCJleHAiOjE2OTUwNTk1MzYsImp0aSI6IjhlYjA5ZGYxLTU2ZGEtNDkyNy04MmRmLThkN2E0NjgxMjY2YiJ9.ahwxR4yRaADWqNgPJtyaeoxdbVO_ZtFxSgPOQclDPYc
 
 ### Return Book
 ### User Must Login
@@ -110,4 +110,4 @@ Access-Token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFkbWluIEtlc
 ### Get All Expired
 ### Admin
 GET  http://localhost:3000/api/book/expired?page=1&limit=5
-Access-Token:
+Access-Token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFkbWluIEtlcmVuIiwiZW1haWwiOiJhZG1pbkBnbWFpbC5jb20iLCJleHAiOjE2OTUwNTk5MDQsImp0aSI6IjhlYjA5ZGYxLTU2ZGEtNDkyNy04MmRmLThkN2E0NjgxMjY2YiJ9.eTAcW8_oB8AdVB9FQHDY9h1z3q70o2hwwPb9rOOCTsI
