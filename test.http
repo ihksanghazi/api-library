@@ -2,10 +2,10 @@
 POST http://localhost:3000/api/auth/register
 
 {
-  "username":"rizky",
-	"email":"rizky@gmail.com",
+  "username":"admin",
+	"email":"admin@gmail.com",
 	"role":"",
-	"password":"123",
+	"password":"admin123",
 	"address":"",
 	"phone_number":"",
 	"image_url":""
@@ -15,7 +15,7 @@ POST http://localhost:3000/api/auth/register
 POST http://localhost:3000/api/auth/login
 
 {
-	"email":"azhi@gmail.com",
+	"email":"andri@gmail.com",
 	"password":"123"
 }
 
