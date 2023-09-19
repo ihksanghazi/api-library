@@ -178,7 +178,8 @@ DELETE http://localhost:3000/api/auth/logout
 
 ### Get All Users
 
-**!!! HANYA ADMIN YANG DAPAT MENGGUNAKAN FITUR INI !!!**
+[!IMPORTANT]
+**!!! HANYA ROLE ADMIN YANG DAPAT MENGGUNAKAN FITUR INI !!!**
 
 Digunakan untuk mendapatkan data pengguna dengan menggunakan parameter **page** dan **limit** untuk mengatur halaman dan batas hasil.
 
@@ -228,7 +229,8 @@ Contoh Response Body:
 
 ### Get User By ID
 
-**!!! HANYA ADMIN YANG DAPAT MENGGUNAKAN FITUR INI !!!**
+[!IMPORTANT]
+**!!! HANYA ROLE ADMIN YANG DAPAT MENGGUNAKAN FITUR INI !!!**
 
 Digunakan untuk mendapatkan data pengguna berdasarkan **ID** pengguna yang ditentukan.
 
@@ -394,7 +396,8 @@ Contoh Response Body:
 
 ### Create New Book
 
-**!!! HANYA ADMIN YANG DAPAT MENGGUNAKAN FITUR INI !!!**
+[!IMPORTANT]
+**!!! HANYA ROLE ADMIN YANG DAPAT MENGGUNAKAN FITUR INI !!!**
 
 Digunakan untuk menambahkan buku baru ke dalam sistem.
 
@@ -502,7 +505,8 @@ Contoh Response Body:
 
 ### Update Book By Id
 
-**!!! HANYA ADMIN YANG DAPAT MENGGUNAKAN FITUR INI !!!**
+[!IMPORTANT]
+**!!! HANYA ROLE ADMIN YANG DAPAT MENGGUNAKAN FITUR INI !!!**
 
 Digunakan untuk memperbarui data buku berdasarkan **ID** buku yang ditentukan.
 
@@ -566,7 +570,8 @@ Contoh Response Body:
 
 ### Delete Book By Id
 
-**!!! HANYA ADMIN YANG DAPAT MENGGUNAKAN FITUR INI !!!**
+[!IMPORTANT]
+**!!! HANYA ROLE ADMIN YANG DAPAT MENGGUNAKAN FITUR INI !!!**
 
 Digunakan untuk menghapus buku berdasarkan **ID** buku yang ditentukan.
 
@@ -741,7 +746,8 @@ Contoh Response Body:
 
 ### Get All Expired Books
 
-**!!! HANYA ADMIN YANG DAPAT MENGGUNAKAN FITUR INI !!!**
+[!IMPORTANT]
+**!!! HANYA ROLE ADMIN YANG DAPAT MENGGUNAKAN FITUR INI !!!**
 
 Digunakan untuk mendapatkan daftar buku yang telah kedaluwarsa.
 
