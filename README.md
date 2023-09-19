@@ -271,7 +271,7 @@ Contoh Response Body:
 		"updated_at": "2023-09-18T22:01:38.383622+07:00",
 		"list_of_books": [
 			{
-				"id": "d4f79719-e5aa-4f9b-b9eb-67ee328aa6bb",
+				"id": "<BookId>",
 				"title": "Praktek Pemrograman",
 				"author": "Admin Keren",
 				"publication_year": 2020,
@@ -648,7 +648,7 @@ Contoh Response Body:
 		"updated_at": "2023-09-18T23:57:05.956312+07:00",
 		"list_of_users": [
 			{
-				"id": "8eb09df1-56da-4927-82df-8d7a4681266b",
+				"id": "<UserId>",
 				"username": "Admin Keren",
 				"email": "admin@gmail.com",
 				"address": "",
